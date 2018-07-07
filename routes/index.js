@@ -47,10 +47,7 @@ router.post('/', function (req, res, next) {
         return next(err);
       } else {
         req.session.userId = user._id;
-        req.session.save(function(err) {
-          console.log("session saved, id: " + req.session.id);
-          res.redirect('/profile');
-        });
+        res.redirect('/profile');
       }
     });
   } else {
@@ -62,7 +59,6 @@ router.post('/', function (req, res, next) {
 
 // GET route after registering
 router.get('/profile', function (req, res, next) {
-  console.log("session id: " + req.session.id);
   User.findById(req.session.userId)
     .exec(function (error, user) {
       if (error) {
