@@ -1,22 +1,27 @@
 module.exports = {
-    "extends": "airbnb",
+    "extends": ["airbnb", "prettier", "prettier/react"],
     "parser": "babel-eslint",
     "rules": { 
         "react/jsx-filename-extension": [0],
         "react/destructuring-assignment": [0],
         "react/jsx-no-undef": [0],
-        "linebreak-style": ["error", "windows"]
+        "linebreak-style": [0]
     },
     "env": { 
         "browser": true,
-        "jest": true
+        "jest": true,
+        "es6": true,
+        "node": true
     },
     "globals":{
         "require": true
     },
-    "plugins": ["prettier"],
-    "rules": {
-        "prettier/prettier": "error"
-    },
-    "extends": ["plugin:prettier/recommended"]
+    "extends": [
+        "airbnb",
+        "prettier",
+        "prettier/react"
+    ],
+    "plugins": [
+        "prettier"
+    ]
 };
