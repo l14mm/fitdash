@@ -1,13 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/userSchema');
+var User = require('../models/user');
 
-router.get('/', function (req, res, next) { //   /:catName
+router.get('/', function (req, res, next) {
   User.find(function (err, results) {
-    //assert.equal(null, err);
-    //console.log(results);
-    //invoke callback with your mongoose returned result
-    //callback(results);
     res.json(results);
   });
 });
@@ -25,70 +21,60 @@ router.post('/', function (req, res, next) {
     req.body.username &&
     req.body.password &&
     req.body.passwordConf) {
-    var userData = new User({
+
+    var userData = {
       email: req.body.email,
       username: req.body.username,
       password: req.body.password,
       passwordConf: req.body.passwordConf,
+    }
+    console.log("registering!");
+    User.create(userData, function (error, user) {
+      if (error) {
+        return next(error);
+      } else {
+        req.session.userId = user._id;
+        return res.redirect('/profile');
+      }
     });
-    userData.save(function (err) {
-      if (err) {
-        console.log(err)
-      };
-      console.log("user added!");
-      res.json({
-        response: "user added!"
-      });
+
+  } else if (req.body.logemail && req.body.logpassword) {
+    console.log("authenticating!");
+    User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
+      if (error || !user) {
+        var err = new Error('Wrong email or password.');
+        err.status = 401;
+        return next(err);
+      } else {
+        req.session.userId = user._id;
+        req.session.save(function(err) {
+          console.log("session saved, id: " + req.session.id);
+          res.redirect('/profile');
+        });
+      }
     });
   } else {
     var err = new Error('All fields required.');
     err.status = 400;
     return next(err);
   }
-
-
-  // //use sessions for tracking logins
-  // app.use(session({
-  //   secret: 'work hard',
-  //   resave: true,
-  //   saveUninitialized: false
-  // }));
-  // reader/index.js
-});
-
-// GET route after registering
-router.get('/checksession', function (req, res, next) {
-  app.use(function checkSession(req, res, next) {
-    if (!req.session.user) {
-      //alternately: res.redirect('/login')
-      return res.json(403, {
-        'message': 'Please go "log in!" (set up your session)',
-        'login': '/login'
-      });
-    } else {
-      next();
-    }
-  });
-  // reader/index.js
-  app.get('/', function displayCount(req, res) {
-    res.json({
-      user: req.session.user,
-      count: req.session.count
-    })
-  });
 });
 
 // GET route after registering
 router.get('/profile', function (req, res, next) {
+  console.log("session id: " + req.session.id);
   User.findById(req.session.userId)
     .exec(function (error, user) {
       if (error) {
         return next(error);
       } else {
-        return res.json({
-          name: user.name,
-          email: user.email
-        });
+        if (user === null) {
+          var err = new Error('Not authorized! Go back!');
+          err.status = 400;
+          return next(err);
+        } else {
+          return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
+        }
       }
     });
 });
@@ -105,6 +91,32 @@ router.get('/logout', function (req, res, next) {
       }
     });
   }
+});
+
+// GET route after registering
+router.get('/checksession', function (req, res, next) {
+  User.findById(req.session.userId)
+    .exec(function (error, user) {
+      if (error) {
+        return next(error);
+      } else {
+        if (user === null) {
+          var err = new Error('Not authorized! Go back!');
+          err.status = 400;
+          return next(err);
+        } else {
+          return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
+        }
+      }
+    });
+
+  // // reader/index.js
+  // app.get('/', function displayCount(req, res) {
+  //   res.json({
+  //     user: req.session.user,
+  //     count: req.session.count
+  //   })
+  // });
 });
 
 module.exports = router;
