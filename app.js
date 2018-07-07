@@ -9,6 +9,19 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/');
+var db = mongoose.connection;
+
+//handle mongo error
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  console.log("connected to mongodb!");
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
