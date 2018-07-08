@@ -38,12 +38,15 @@ router.post('/register', function (req, res, next) {
           User.create(userData, function (error, user) {
             if (error) {
               console.log("error creating user");
+              console.log(error);
               return next(error);
             } else {
               console.log("successfully registered");
               req.session.userId = user._id;
               //return res.redirect('/profile');
-              return res.send("successfully registered");
+              return res.send(200, {
+                'message': "successfully registered"
+              });
             }
           });
         }
@@ -70,11 +73,18 @@ router.post('/login', function (req, res, next) {
         console.log("Wrong email or password");
         var err = new Error('Wrong email or password');
         err.status = 401;
-        return next(err);
+        //return next(err);
+        // return res.json({ error: "errror4101" });
+        return res.send(401, {
+          'test': 'testing'
+        });
       } else {
         console.log("logged in");
         req.session.userId = user._id;
-        return res.redirect('/profile');
+        //return res.redirect('/profile');
+        return res.send(200, {
+          'id_token': user._id
+        });
       }
     });
   } else {
