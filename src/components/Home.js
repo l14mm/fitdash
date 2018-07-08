@@ -1,34 +1,10 @@
 import React, { Component } from "react";
-
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-
-import { connect } from 'react-redux';
-import { userActions } from '../actions/user.actions';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
 
-const styles = theme => ({
-  toolbar: {
-    background: "linear-gradient(45deg, #8e24aa 0%, #ff6e40 100%)",
-    display: 'flex',
-    justifyContent: 'space-between'
-  },
-  title: {
-    color: 'white'
-  },
-  toolbarRight: {
-    float: 'right'
-  }
-});
+import { userActions } from '../actions/user.actions';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-
-    // this.state = {};
-  }
 
   componentDidMount() {
     this.props.dispatch(userActions.getAll());
@@ -39,7 +15,7 @@ class Home extends Component {
   }
 
   render() {
-    const { classes, user, users } = this.props;
+    const { user, users } = this.props;
     return (
 
       <div className="header">
@@ -53,7 +29,7 @@ class Home extends Component {
             <ul>
               {users.items.map((user, index) =>
                 <li key={user.id}>
-                  {user.firstName + ' ' + user.lastName}
+                  {`${user.firstName} ${user.lastName}`}
                   {
                     user.deleting ? <em> - Deleting...</em>
                       : user.deleteError ? <span className="error"> - ERROR: {user.deleteError}</span>

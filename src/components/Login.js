@@ -6,9 +6,8 @@ import CardActions from "@material-ui/core/CardActions";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
- 
+
 import { userActions } from '../actions/user.actions';
 
 const apiUrl = "http://localhost:3000";
@@ -71,12 +70,12 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
-    //this.handleInputChange = this.handleInputChange.bind(this);
+    // this.handleInputChange = this.handleInputChange.bind(this);
     this.login = this.login.bind(this);
     this.validateForm = this.validateForm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    //this.state = { username: "username133", password: "password1" };
+    // this.state = { username: "username133", password: "password1" };
 
 
     // reset login status
@@ -90,6 +89,8 @@ class Login extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    console.log("login constructor");
   }
 
   // handleInputChange(event) {
@@ -98,10 +99,10 @@ class Login extends Component {
   //   const value = target.value;
   //   this.setState({ [id]: value });
   // }
- 
+
   handleChange(e) {
-      const { id, value } = e.target;
-      this.setState({ [id]: value });
+    const { id, value } = e.target;
+    this.setState({ [id]: value });
   }
 
   validateForm() {
@@ -115,9 +116,9 @@ class Login extends Component {
     const { username, password } = this.state;
     const { dispatch } = this.props;
     if (username && password) {
-        dispatch(userActions.login(username, password));
+      dispatch(userActions.login(username, password));
     }
-    //this.login();
+    // this.login();
   }
 
   login() {
@@ -161,13 +162,15 @@ class Login extends Component {
         <Card className={classes.card}>
           <form className={classes.form} onSubmit={this.handleSubmit}>
             <div className={classes.hint}>Login</div>
+            {loggingIn && <p>Logging in</p>}
+            {submitted && <p>Submitter</p>}
             <TextField
               required
               id="username"
               label="username"
               className={classes.textField}
               margin="normal"
-              value={this.state.username}
+              value={username}
               onChange={this.handleChange}
             />
             <TextField
@@ -176,7 +179,7 @@ class Login extends Component {
               label="password"
               className={classes.textField}
               margin="normal"
-              value={this.state.password}
+              value={password}
               onChange={this.handleChange}
             />
             <Button type="submit" variant="contained" color="secondary" className={classes.button} style={{ margin: '10px' }}
@@ -192,11 +195,11 @@ class Login extends Component {
   }
 }
 
- 
+
 function mapStateToProps(state) {
   const { loggingIn } = state.authentication;
   return {
-      loggingIn
+    loggingIn
   };
 }
 

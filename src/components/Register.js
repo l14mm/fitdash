@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
-import LockIcon from "@material-ui/icons/LockOutline";
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { userActions } from '../actions/user.actions';
 
 const apiUrl = "http://localhost:3000";
 
@@ -69,17 +70,39 @@ class Register extends Component {
   constructor(props) {
     super(props);
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleRegister = this.handleRegister.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.state = { username: "username1", email: "email1", password: "password1" };
+    this.state = {
+      user: {
+        username: "username1",
+        email: "email1",
+        password: "password1",
+      },
+      submitted: false
+    };
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const id = target.id;
-    const value = target.value;
-    this.setState({ [id]: value });
+  handleChange(event) {
+    const { id, value } = event.target;
+    const { user } = this.state;
+    this.setState({
+      user: {
+        ...user,
+        [id]: value
+      }
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    this.setState({ submitted: true });
+    const { user } = this.state;
+    const { dispatch } = this.props;
+    if (user.email && user.username && user.password) {
+      dispatch(userActions.register(user));
+    }
   }
 
   handleRegister() {
@@ -117,11 +140,12 @@ class Register extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, registering } = this.props;
+    const { user, submitted } = this.state;
     return (
       <div className={classes.main}>
         <Card className={classes.card}>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={this.handleSubmit}>
             <div className={classes.hint}>Register</div>
             <TextField
               required
@@ -129,8 +153,8 @@ class Register extends Component {
               label="username"
               className={classes.textField}
               margin="normal"
-              value={this.state.username}
-              onChange={this.handleInputChange}
+              value={user.username}
+              onChange={this.handleChange}
             />
             <TextField
               required
@@ -138,8 +162,8 @@ class Register extends Component {
               label="email address"
               className={classes.textField}
               margin="normal"
-              value={this.state.email}
-              onChange={this.handleInputChange}
+              value={user.email}
+              onChange={this.handleChange}
             />
             <TextField
               required
@@ -147,8 +171,8 @@ class Register extends Component {
               label="password"
               className={classes.textField}
               margin="normal"
-              value={this.state.password}
-              onChange={this.handleInputChange}
+              value={user.password}
+              onChange={this.handleChange}
             />
             <TextField
               required
@@ -156,10 +180,10 @@ class Register extends Component {
               label="confirm password"
               className={classes.textField}
               margin="normal"
-              value={this.state.password}
-              onChange={this.handleInputChange}
+              value={user.password}
+              onChange={this.handleChange}
             />
-            <Button variant="contained" color="secondary" className={classes.button} style={{ margin: '10px' }} onClick={this.handleRegister}
+            <Button type="submit" variant="contained" color="secondary" className={classes.button} style={{ margin: '10px' }}
             >
               Register
             </Button>
@@ -171,4 +195,12 @@ class Register extends Component {
   }
 }
 
-export default withStyles(styles)(Register);
+function mapStateToProps(state) {
+  const { registering } = state.registration;
+  return {
+    registering
+  };
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(Register));
+// export default withStyles(styles)(Register);
