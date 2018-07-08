@@ -4,50 +4,77 @@ var User = require('../models/user');
 
 router.get('/', function (req, res, next) {
   User.find(function (err, results) {
-    res.json(results);
+    //res.json(results);
+    if (req.session.page_views) {
+      req.session.page_views++;
+      res.send("You visited this page " + req.session.page_views + " times " + JSON.stringify(results));
+      //res.send(results);
+    } else {
+      req.session.page_views = 1;
+      return res.send("Welcome to this page for the first time!");
+    }
   });
 });
 
-router.post('/', function (req, res, next) {
-  // confirm that passwords matches password confirmation
-  if (req.body.password !== req.body.passwordConf) {
-    var err = new Error('Passwords do not match.');
-    err.status = 400;
-    res.send("passwords dont match");
-    return next(err);
-  }
-
+router.post('/register', function (req, res, next) {
+  console.log("registering 0");
+  console.log(req.body);
   if (req.body.email &&
     req.body.username &&
-    req.body.password &&
-    req.body.passwordConf) {
+    req.body.password) {
 
     var userData = {
       email: req.body.email,
       username: req.body.username,
-      password: req.body.password,
-      passwordConf: req.body.passwordConf,
+      password: req.body.password
     }
-    console.log("registering!");
-    User.create(userData, function (error, user) {
-      if (error) {
-        return next(error);
-      } else {
-        req.session.userId = user._id;
-        return res.redirect('/profile');
-      }
-    });
+    console.log("registering 1");
+    User.findOne({ username: req.body.username })
+      .exec(function (err, user) {
+        if (err) {
+          console.log("error searching for username");
+        } else if (!user) {
+          console.log("username doesn't exist");
+          User.create(userData, function (error, user) {
+            if (error) {
+              console.log("error creating user");
+              return next(error);
+            } else {
+              console.log("successfully registered");
+              req.session.userId = user._id;
+              //return res.redirect('/profile');
+              return res.send("successfully registered");
+            }
+          });
+        }
+        else {
+          console.log("username already exists");
+        }
+      });
+  } else {
+    var err = new Error('All fields required');
+    err.status = 400;
+    res.send("All fields required");
+    return next(err);
+  }
+});
 
-  } else if (req.body.logemail && req.body.logpassword) {
-    console.log("authenticating!");
-    User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
+router.post('/login', function (req, res, next) {
+  console.log("login");
+  console.log(req.body);
+  if (req.body.username &&
+    req.body.password) {
+    console.log("logging in");
+    User.authenticate(req.body.username, req.body.password, function (error, user) {
       if (error || !user) {
-        var err = new Error('Wrong email or password.');
+        console.log("Wrong email or password");
+        var err = new Error('Wrong email or password');
         err.status = 401;
         return next(err);
       } else {
+        console.log("logged in");
         req.session.userId = user._id;
-        res.redirect('/profile');
+        return res.redirect('/profile');
       }
     });
   } else {
@@ -69,7 +96,8 @@ router.get('/profile', function (req, res, next) {
           err.status = 400;
           return next(err);
         } else {
-          return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
+          // return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
+          return res.send("Hello world");
         }
       }
     });
