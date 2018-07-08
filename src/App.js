@@ -2,14 +2,11 @@ import React, { Component } from "react";
 import "./App.css";
 
 import { withStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import LoginForm from "./LoginForm";
+import { Button } from "@material-ui/core";
+import Header from "./components/Header";
+import Main from "./components/Main";
 
 const styles = {
-  toolbar: {
-    background: "linear-gradient(45deg, #8e24aa 0%, #ff6e40 100%)"
-  }
 };
 
 class App extends Component {
@@ -23,16 +20,8 @@ class App extends Component {
     const { classes } = this.props;
     return (
       <div className="app">
-        <div className="header">
-          <Toolbar className={classes.toolbar}>
-            <Typography variant="title" color="primary">
-              Planets App
-            </Typography>
-          </Toolbar>
-        </div>
-        <div className="main">
-          <LoginForm />
-        </div>
+        <Header />
+        <Main />
       </div>
     );
   }

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -9,7 +8,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 import LockIcon from "@material-ui/icons/LockOutline";
-import logo from "./logo.svg";
 
 const apiUrl = "http://localhost:3000";
 
@@ -55,7 +53,9 @@ const styles = theme => ({
     color: theme.palette.grey[500]
   },
   form: {
-    padding: "0 1em 1em 1em"
+    padding: "0 1em 1em 1em",
+    display: 'flex',
+    flexDirection: 'column'
   },
   input: {
     marginTop: "1em"
@@ -65,14 +65,14 @@ const styles = theme => ({
   }
 });
 
-class LoginForm extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
 
-    this.state = { email: "email1", password: "password1" };
+    this.state = { username: "username1", email: "email1", password: "password1" };
   }
 
   handleInputChange(event) {
@@ -83,7 +83,7 @@ class LoginForm extends Component {
   }
 
   handleRegister() {
-    fetch(`${apiUrl}`, {
+    fetch(`${apiUrl}/register`, {
       method: 'POST',
       credentials: "include",
       headers: {
@@ -91,14 +91,17 @@ class LoginForm extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "logemail": this.state.email,
-        "logpassword": this.state.password,
+        "email": this.state.email,
+        "username": this.state.username,
+        "password": this.state.password,
+        "passwordConf": this.state.passwordConf,
       })
     })
       .then(response => {
         console.log(response);
         if (response.ok) {
-          console.log("ok response");
+          console.log("ok");
+          console.log(response.data);
         }
         else if (response.status === 401) {
           console.log("unauthorised!");
@@ -118,16 +121,15 @@ class LoginForm extends Component {
     return (
       <div className={classes.main}>
         <Card className={classes.card}>
-          <form>
+          <form className={classes.form}>
             <div className={classes.hint}>Register</div>
-            <div className={classes.form} />
             <TextField
               required
               id="username"
               label="username"
               className={classes.textField}
               margin="normal"
-              // value={this.state.newplanetname}
+              value={this.state.username}
               onChange={this.handleInputChange}
             />
             <TextField
@@ -154,7 +156,7 @@ class LoginForm extends Component {
               label="confirm password"
               className={classes.textField}
               margin="normal"
-              // value={this.state.newplanetname}
+              value={this.state.password}
               onChange={this.handleInputChange}
             />
             <Button variant="contained" color="secondary" className={classes.button} style={{ margin: '10px' }} onClick={this.handleRegister}
@@ -169,4 +171,4 @@ class LoginForm extends Component {
   }
 }
 
-export default withStyles(styles)(LoginForm);
+export default withStyles(styles)(Register);
