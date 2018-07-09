@@ -12,10 +12,12 @@ import registerServiceWorker from "./registerServiceWorker";
 import Home from "./components/Home";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import MembersArea from './components/MembersArea'
+import Logout from './components/Logout';
 
 const store = createStore(
   reducers,
-  {},
+  { auth: { authenticated: localStorage.getItem('token') } },
   applyMiddleware(reduxThunk)
 );
 
@@ -23,13 +25,15 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <App>
-        <Route exact path='/' component={Login} />
+        <Route exact path='/' component={Home} />
         <Route path='/register' component={Register} />
         <Route path='/login' component={Login} />
+        <Route path='/logout' component={Logout} />
+        <Route path='/membersarea' component={MembersArea} />
       </App>
     </Router>
   </Provider>
   , document.getElementById('root'),
- 
+
 );
 registerServiceWorker();

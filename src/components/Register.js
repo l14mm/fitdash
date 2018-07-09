@@ -5,13 +5,10 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
 import { compose } from 'redux';
 import { reduxForm, Field } from 'redux-form';
-
-const apiUrl = "http://localhost:3000";
+import * as actions from '../actions';
 
 const styles = theme => ({
   container: {
@@ -21,7 +18,9 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 200
+    width: 200,
+    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing.unit
   },
   menu: {
     width: 200
@@ -67,6 +66,27 @@ const styles = theme => ({
   }
 });
 
+// Used to plug material ui text field into redux-form field
+const renderTextField = ({
+  input,
+  label,
+  value,
+  className,
+  meta: { touched, error },
+  ...custom
+}) => (
+    <TextField
+      // hintText={label}
+      // floatingLabelText={label}
+      label={label}
+      value="value"
+      className={className}
+      // errorText={touched && error}
+      {...input}
+      {...custom}
+    />
+  )
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -95,41 +115,9 @@ class Register extends Component {
   }
 
   onSubmit = (formProps) => {
-    this.props.register(formProps);
-  }
-
-  handleRegister() {
-    fetch(`${apiUrl}/register`, {
-      method: 'POST',
-      credentials: "include",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "email": this.state.email,
-        "username": this.state.username,
-        "password": this.state.password,
-        "passwordConf": this.state.passwordConf,
-      })
-    })
-      .then(response => {
-        console.log(response);
-        if (response.ok) {
-          console.log("ok");
-          console.log(response.data);
-        }
-        else if (response.status === 401) {
-          console.log("unauthorised!");
-        }
-        else {
-          console.log(response.status);
-        }
-      }
-      )
-      .catch((error) => {
-        console.error(error);
-      });
+    this.props.register(formProps, () => {
+      this.props.history.push('/membersarea');
+    });
   }
 
   render() {
@@ -140,42 +128,49 @@ class Register extends Component {
         <Card className={classes.card}>
           <form className={classes.form} onSubmit={handleSubmit(this.onSubmit)}>
             <div className={classes.hint}>Register</div>
-            <TextField
-              required
-              id="username"
+            <Field
+              name="username"
+              type="text"
               label="username"
-              className={classes.textField}
-              margin="normal"
+              id="username"
               value={user.username}
-              onChange={this.handleChange}
-            />
-            <TextField
+              component={renderTextField}
+              className={classes.textField}
               required
+            />
+            <Field
+              name="email"
+              type="text"
+              label="email"
               id="email"
-              label="email address"
-              className={classes.textField}
-              margin="normal"
               value={user.email}
-              onChange={this.handleChange}
-            />
-            <TextField
+              component={renderTextField}
+              className={classes.textField}
               required
-              id="password"
+            />
+            <Field
+              name="password"
+              type="text"
               label="password"
-              className={classes.textField}
-              margin="normal"
+              id="password"
               value={user.password}
-              onChange={this.handleChange}
-            />
-            <TextField
+              component={renderTextField}
+              className={classes.textField}
               required
-              id="passwordconf"
-              label="confirm password"
-              className={classes.textField}
-              margin="normal"
-              value={user.password}
-              onChange={this.handleChange}
             />
+            <Field
+              name="passwordConf"
+              type="text"
+              label="passwordConf"
+              id="passwordConf"
+              value={user.passwordConf}
+              component={renderTextField}
+              className={classes.textField}
+              required
+            />
+            <div>
+              {this.props.errorMessage}
+            </div>
             <Button type="submit" variant="contained" color="secondary" className={classes.button} style={{ margin: '10px' }}
             >
               Register
@@ -188,8 +183,12 @@ class Register extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return { errorMessage: state.auth.errorMessage }
+}
+
 export default compose(
-  connect(null, actions),
+  connect(mapStateToProps, actions),
   reduxForm({ form: 'register' }),
   withStyles(styles)
 )(Register);
