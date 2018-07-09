@@ -7,8 +7,9 @@ import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-import { userActions } from '../actions/user.actions';
+import * as actions from '../actions';
+import { compose } from 'redux';
+import { reduxForm, Field } from 'redux-form';
 
 const apiUrl = "http://localhost:3000";
 
@@ -71,7 +72,6 @@ class Register extends Component {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       user: {
@@ -94,15 +94,8 @@ class Register extends Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    this.setState({ submitted: true });
-    const { user } = this.state;
-    const { dispatch } = this.props;
-    if (user.email && user.username && user.password) {
-      dispatch(userActions.register(user));
-    }
+  onSubmit = (formProps) => {
+    this.props.register(formProps);
   }
 
   handleRegister() {
@@ -140,12 +133,12 @@ class Register extends Component {
   }
 
   render() {
-    const { classes, registering } = this.props;
+    const { classes, handleSubmit } = this.props;
     const { user, submitted } = this.state;
     return (
       <div className={classes.main}>
         <Card className={classes.card}>
-          <form className={classes.form} onSubmit={this.handleSubmit}>
+          <form className={classes.form} onSubmit={handleSubmit(this.onSubmit)}>
             <div className={classes.hint}>Register</div>
             <TextField
               required
@@ -195,12 +188,8 @@ class Register extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { registering } = state.registration;
-  return {
-    registering
-  };
-}
-
-export default connect(mapStateToProps)(withStyles(styles)(Register));
-// export default withStyles(styles)(Register);
+export default compose(
+  connect(null, actions),
+  reduxForm({ form: 'register' }),
+  withStyles(styles)
+)(Register);

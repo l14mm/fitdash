@@ -2,16 +2,13 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 
-import { userActions } from '../actions/user.actions';
 
 class Home extends Component {
 
   componentDidMount() {
-    this.props.dispatch(userActions.getAll());
   }
 
   handleDeleteUser(id) {
-    return (e) => this.props.dispatch(userActions.delete(id));
   }
 
   render() {

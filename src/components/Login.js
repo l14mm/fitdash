@@ -6,9 +6,6 @@ import CardActions from "@material-ui/core/CardActions";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 
-import { connect } from 'react-redux';
-
-import { userActions } from '../actions/user.actions';
 
 const apiUrl = "http://localhost:3000";
 
@@ -77,10 +74,6 @@ class Login extends Component {
 
     // this.state = { username: "username133", password: "password1" };
 
-
-    // reset login status
-    this.props.dispatch(userActions.logout());
-
     this.state = {
       username: '',
       password: '',
@@ -112,13 +105,6 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.setState({ submitted: true });
-    const { username, password } = this.state;
-    const { dispatch } = this.props;
-    if (username && password) {
-      dispatch(userActions.login(username, password));
-    }
-    // this.login();
   }
 
   login() {
@@ -195,13 +181,4 @@ class Login extends Component {
   }
 }
 
-
-function mapStateToProps(state) {
-  const { loggingIn } = state.authentication;
-  return {
-    loggingIn
-  };
-}
-
-export default connect(mapStateToProps)(withStyles(styles)(Login));
-// export default withStyles(styles)(Login);
+export default withStyles(styles)(Login);
