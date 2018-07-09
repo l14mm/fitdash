@@ -21,7 +21,15 @@ var UserSchema = new Schema({
   }
 });
 
-//authenticate input against database
+UserSchema.methods.comparePassword = function(candidatePassword, callback) {
+  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+    if(err){return callback(err);}
+
+    callback(null, isMatch);
+  })
+}
+
+// Authenticate input against database
 UserSchema.statics.authenticate = function (username, password, callback) {
   User.findOne({ username: username })
     .exec(function (err, user) {
@@ -47,16 +55,22 @@ UserSchema.statics.authenticate = function (username, password, callback) {
     });
 }
 
-//hashing a password before saving it to the database
+// Hash a password before saving it to the database
 UserSchema.pre('save', function (next) {
+  // Get access to user model instance
   var user = this;
-  bcrypt.hash(user.password, 10, function (err, hash){
-    if (err) {
-      return next(err);
-    }
-    user.password = hash;
-    next();
-  })
+
+  // Generate a salt then hash
+  bcrypt.genSalt(10, function(err, salt) {
+    // Hash password using salt
+    bcrypt.hash(user.password, 10, function (err, hash){
+      if (err) {
+        return next(err);
+      }
+      user.password = hash;
+      next();
+    });
+  });
 });
 
 
