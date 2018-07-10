@@ -27,13 +27,18 @@ const App = ({ children }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <div style={{
-        backgroundColor: "#212121",
+        backgroundColor: "gray",
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column'
       }}>
         <Header />
-        {children}
+        <div style={{
+          flex: '1 0 auto',
+          padding: '20px'
+        }}>
+          {children}
+        </div>
         <Footer />
       </div>
     </MuiThemeProvider >
