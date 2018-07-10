@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import requireAuth from './requireAuth'
 
-class MembersArea extends Component {
-    render() {
-        return (
-            <div>
+const MembersArea = () => {
+    return (
+        <div style={{
+            flex: '1 0 auto'
+        }}>
+            <p>
                 Members area!
-            </div>
-        )
-    }
+            </p>
+        </div>
+    )
 }
+
 
 export default requireAuth(MembersArea);

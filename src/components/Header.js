@@ -6,18 +6,26 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { AppBar } from "../../node_modules/@material-ui/core";
+
 
 const styles = theme => ({
+    appBar: {
+        backgroundColor: 'transparent',
+        boxShadow: 'none'
+    },
     toolbar: {
-        background: "linear-gradient(45deg, #8e24aa 0%, #ff6e40 100%)",
+        // backgroundColor: theme.palette.secondary,
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        // color: 'white'
     },
     title: {
         color: 'white'
     },
     toolbarRight: {
-        float: 'right'
+        float: 'right',
+        color: "#2c3e50"
     },
     link: {
         textDecoration: 'none'
@@ -57,21 +65,23 @@ class Header extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Toolbar className={classes.toolbar}>
-                <Link to="/" className={classes.link}>
-                    <Typography className={classes.title} variant="title" color="primary">
-                        Planets App
-                </Typography>
-                </Link>
-                <div className={classes.toolbarRight}>
-                    <Link to="/membersarea" className={classes.link}>
-                        <Button className={classes.title}>
-                            Members Area
-                        </Button>
+            <AppBar position="static" className={classes.appBar}>
+                <Toolbar className={classes.toolbar}>
+                    <Link to="/" className={classes.link}>
+                        <Typography className={classes.title} variant="title" color="secondary">
+                            FitDash
+                        </Typography>
                     </Link>
-                    {this.renderLinks(classes)}
-                </div>
-            </Toolbar>
+                    <div className={classes.toolbarRight}>
+                        <Link to="/membersarea" className={classes.link}>
+                            <Button className={classes.title}>
+                                Members Area
+                        </Button>
+                        </Link>
+                        {this.renderLinks(classes)}
+                    </div>
+                </Toolbar>
+            </AppBar>
         );
     }
 }

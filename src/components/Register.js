@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -28,12 +29,9 @@ const styles = theme => ({
   main: {
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh",
     alignItems: "center",
     justifyContent: "flex-start",
-    // background: "url(https://source.unsplash.com/random/1600x900)",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover"
+    flex: '1 0 auto'
   },
   card: {
     minWidth: 300,
@@ -103,6 +101,12 @@ class Register extends Component {
     };
   }
 
+  onSubmit = (formProps) => {
+    this.props.register(formProps, () => {
+      this.props.history.push('/membersarea');
+    });
+  }
+
   handleChange(event) {
     const { id, value } = event.target;
     const { user } = this.state;
@@ -114,15 +118,9 @@ class Register extends Component {
     });
   }
 
-  onSubmit = (formProps) => {
-    this.props.register(formProps, () => {
-      this.props.history.push('/membersarea');
-    });
-  }
-
   render() {
     const { classes, handleSubmit } = this.props;
-    const { user, submitted } = this.state;
+    const { user } = this.state;
     return (
       <div className={classes.main}>
         <Card className={classes.card}>
@@ -161,7 +159,7 @@ class Register extends Component {
             <Field
               name="passwordConf"
               type="text"
-              label="passwordConf"
+              label="password confirmation"
               id="passwordConf"
               value={user.passwordConf}
               component={renderTextField}
@@ -181,6 +179,14 @@ class Register extends Component {
       </div>
     );
   }
+}
+
+Register.propTypes = {
+  classes: PropTypes.shape.isRequired,
+  register: PropTypes.shape.isRequired,
+  history: PropTypes.shape.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string.isRequired,
 }
 
 function mapStateToProps(state) {
