@@ -16,36 +16,15 @@ function tokenForUser(user) {
 }
 
 router.get('/userDetails', requireAuth, function (req, res, next) {
-  // res.send({username: req.user.username});
-  res.json({ username: req.user.username });
+  res.json({ username: req.user.username, layout: req.user.layout });
 });
 
 router.post('/saveLayout', requireAuth, function (req, res, next) {
-  // res.send({username: req.user.username});
-  // console.log(req);
-  // console.log(req.user);
-  // console.log(req.user.username);
-  console.log('savelayout')
-  // console.log(req.body.layout);
-  // var layout = req.body.layout || req.body.body.layout;
+  User.findOneAndUpdate({ username: req.user.username }, { layout: req.body.layout }, { new: false }, function (err, doc) {
+    if (err) { return next(err); }
 
-  // User.findOneAndUpdate({ username: req.user.username }, { layout: layout }, { new: false }, function (err, doc) {
-  //   if (err) { return next(err); }
-
-  //   return res.json({ message: "succesfully saved" });
-  // });
-  return res.json({ message: "succesfully saved" });
-  // User.findOne({ username: req.user.username }, function (err, existingUser) {
-  //   if (err) { return next(err); }
-
-  //   if (existingUser) {
-  //     return res.status(422).send({ error: "Username already exists" });
-  //   }
-
-  //   res.json({ username: req.user.username });
-
-  // });
-  // res.json({ username: req.user.username });
+  });
+  res.json({ message: "succesfully saved" });
 });
 
 router.post('/register', function (req, res, next) {
