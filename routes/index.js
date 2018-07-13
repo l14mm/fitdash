@@ -15,8 +15,37 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
 }
 
-router.get('/profile', requireAuth, function (req, res, next) {
-  res.send({hi: req.user.username});
+router.get('/userDetails', requireAuth, function (req, res, next) {
+  // res.send({username: req.user.username});
+  res.json({ username: req.user.username });
+});
+
+router.post('/saveLayout', requireAuth, function (req, res, next) {
+  // res.send({username: req.user.username});
+  // console.log(req);
+  // console.log(req.user);
+  // console.log(req.user.username);
+  console.log('savelayout')
+  // console.log(req.body.layout);
+  // var layout = req.body.layout || req.body.body.layout;
+
+  // User.findOneAndUpdate({ username: req.user.username }, { layout: layout }, { new: false }, function (err, doc) {
+  //   if (err) { return next(err); }
+
+  //   return res.json({ message: "succesfully saved" });
+  // });
+  return res.json({ message: "succesfully saved" });
+  // User.findOne({ username: req.user.username }, function (err, existingUser) {
+  //   if (err) { return next(err); }
+
+  //   if (existingUser) {
+  //     return res.status(422).send({ error: "Username already exists" });
+  //   }
+
+  //   res.json({ username: req.user.username });
+
+  // });
+  // res.json({ username: req.user.username });
 });
 
 router.post('/register', function (req, res, next) {
@@ -51,7 +80,7 @@ router.post('/register', function (req, res, next) {
 router.post('/login', requireLogin, function (req, res, next) {
   // User has already had their email and password auth'd
   // We just need to give them a token
-  res.send({token: tokenForUser(req.user), hi: req.user.username});
+  res.send({ token: tokenForUser(req.user), hi: req.user.username });
 
 });
 
