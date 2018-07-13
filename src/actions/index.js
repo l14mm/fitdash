@@ -32,11 +32,12 @@ export const getUserDetails = (callback) => async dispatch => {
         const response = await axios.get('http://localhost:3000/userDetails', {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('token'),
+                'Authorization': `bearer ${localStorage.getItem('token')}`,
             }
         });
         // Send to middlewares and reducers
-        dispatch({ type: USER_DETAILS, payload: response.data.username });
+        console.log(response.data);
+        dispatch({ type: USER_DETAILS, payload: response.data });
         callback();
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Invalid login details" })
@@ -45,33 +46,27 @@ export const getUserDetails = (callback) => async dispatch => {
 
 export const logout = (callback) => async dispatch => {
     try {
-        const layout = localStorage.getItem("dashboard-layout") || "no layout";
-        console.log('token: ' + localStorage.getItem('token'));
-        const response = axios.post('http://localhost:3000/saveLayout', {
+        console.log("sent request");
+        const headers = {
             headers: {
-                'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1YjQzMzBmMWUzNzllZjExZjY5ODg3NTkiLCJpYXQiOjE1MzExMzAwOTczOTN9.qnj2JgRaGqaIuChA3knsbGPKgTSyq2QJ-tYMWFekghE',
                 'Content-Type': 'application/json',
-            },
-            body: {
-                layout: 'mylayout1233'
+                'Authorization': `bearer ${localStorage.getItem('token')}`,
             }
-        }
-    );
-        console.log('response: ')
-        console.log(response)
-
-
-        // return {
-        //     // toggles
-        //     type: AUTH_USER,
-        //     payload: ''
-        // }
+        };
+        const data = {
+            'layout': localStorage.getItem('dashboard-layout')
+        };
+        const response = await axios.post('http://localhost:3000/saveLayout', data, headers);
+        // Send to middlewares and reducers
+        // dispatch({ type: USER_DETAILS, payload: response.data.username });
         // callback();
-    } catch (e) {
         localStorage.removeItem('token');
-        // dispatch({ type: AUTH_ERROR, payload: "Username already exists" })
+        localStorage.clear();
+    } catch (e) {
+        dispatch({ type: AUTH_ERROR, payload: "Invalid login details" })
+        localStorage.removeItem('token');
+        localStorage.clear();
     }
 
-    localStorage.removeItem('token');
 
 }

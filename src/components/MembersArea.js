@@ -5,10 +5,15 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import ResponsiveGridLayout from './ResponsiveGridLayout';
-
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import StarBorderIcon from '@material-ui/icons/StarBorder'
+import { Responsive, WidthProvider } from 'react-grid-layout';
+import ResponsiveGridLayout from './ResponsiveGridLayout';
+
 import * as actions from '../actions';
 
 import requireAuth from './requireAuth';
@@ -21,12 +26,7 @@ import LineGraph from './LineGraph';
 import { Button, IconButton } from '../../node_modules/@material-ui/core';
 
 
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import StarBorderIcon from '@material-ui/icons/StarBorder'
 
-import { Responsive, WidthProvider } from 'react-grid-layout';
 // const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
@@ -69,13 +69,16 @@ class MembersArea extends Component {
     }
 
     render() {
+        console.log('layout')
+        console.log(this.props.layout)
+        localStorage.setItem('dashboard-layout', this.props.layout)
         const { classes, username } = this.props;
         // const DATA = [32, 57, 112, 293];
-        var layout = [
-            { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
-            { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-            { i: 'c', x: 4, y: 0, w: 1, h: 2 }
-        ];
+        // const layout = [
+        //     { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
+        //     { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
+        //     { i: 'c', x: 4, y: 0, w: 1, h: 2 }
+        // ];
 
         return (
             <div className={classes.root}>
@@ -106,7 +109,7 @@ class MembersArea extends Component {
                         </Paper>
                     </GridListTile>
                 </GridList> */}
-                <ResponsiveGridLayout>
+                <ResponsiveGridLayout layout={this.props.layout}>
                     <div key="1" data-grid={{ w: 2, h: 3, x: 0, y: 0, minW: 2, minH: 3 }}>
                         <Paper square className={classes.paper}>
                             <div>
@@ -116,26 +119,7 @@ class MembersArea extends Component {
                     </div>
                     <div key="2" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
                         <Paper square className={classes.paper}>
-                            <MapWithASearchBox />
-                        </Paper>
-                    </div>
-                    <div key="3" data-grid={{ w: 2, h: 3, x: 4, y: 0, minW: 2, minH: 3 }}>
-                        <Paper square className={classes.paper}>
-                            <BarGraph data={[5, 10, 1, 3, 5, 5, 10]} size={[500, 500]} />
-                        </Paper>
-                    </div>
-                    <div key="4" data-grid={{ w: 2, h: 3, x: 6, y: 0, minW: 2, minH: 3 }}>
-                        <Paper square className={classes.paper}>
-                            <div>
-                                Name: {username}
-                            </div>
-                        </Paper>
-                    </div>
-                    <div key="5" data-grid={{ w: 2, h: 3, x: 8, y: 0, minW: 2, minH: 3 }}>
-                        <Paper square className={classes.paper}>
-                            <div>
-                                Name: {username}
-                            </div>
+                            {/* <MapWithASearchBox /> */}
                         </Paper>
                     </div>
                 </ResponsiveGridLayout>
@@ -169,7 +153,8 @@ class MembersArea extends Component {
 
 function mapStateToProps(state) {
     return {
-        username: state.auth.username
+        username: state.auth.username,
+        layout: state.auth.layout
     }
 }
 
