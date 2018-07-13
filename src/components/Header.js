@@ -6,13 +6,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { AppBar } from "../../node_modules/@material-ui/core";
+import { AppBar } from "@material-ui/core";
 
 
 const styles = theme => ({
     appBar: {
-        backgroundColor: 'transparent',
-        boxShadow: 'none'
+        backgroundColor: 'white',
+        // boxShadow: 'none'
     },
     toolbar: {
         // backgroundColor: theme.palette.secondary,
@@ -21,7 +21,7 @@ const styles = theme => ({
         // color: 'white'
     },
     title: {
-        color: 'white'
+        color: 'gray'
     },
     toolbarRight: {
         float: 'right',

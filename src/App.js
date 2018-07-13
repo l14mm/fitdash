@@ -27,7 +27,7 @@ const App = ({ children }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <div style={{
-        backgroundColor: "gray",
+        backgroundColor: "rgb(245, 245, 245)",
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column'

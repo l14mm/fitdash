@@ -166,11 +166,15 @@ Login.propTypes = {
   login: PropTypes.shape.isRequired,
   history: PropTypes.shape.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  errorMessage: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string,
 }
 
+Login.defaultProps = {
+  errorMessage: '',
+};
+
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.errorMessage }
+  return { errorMessage: state.auth.errorMessage, username: state.username }
 }
 
 export default compose(
