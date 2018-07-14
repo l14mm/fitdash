@@ -44,29 +44,22 @@ export const getUserDetails = (callback) => async dispatch => {
     }
 };
 
-export const logout = (callback) => async dispatch => {
-    try {
-        console.log("sent request");
-        const headers = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `bearer ${localStorage.getItem('token')}`,
-            }
-        };
-        const data = {
-            'layout': localStorage.getItem('dashboard-layout')
-        };
-        const response = await axios.post('http://localhost:3000/saveLayout', data, headers);
-        // Send to middlewares and reducers
-        // dispatch({ type: USER_DETAILS, payload: response.data.username });
-        // callback();
-        localStorage.removeItem('token');
-        localStorage.clear();
-    } catch (e) {
-        dispatch({ type: AUTH_ERROR, payload: "Invalid login details" })
-        localStorage.removeItem('token');
-        localStorage.clear();
+export const logout = () => {
+    const headers = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${localStorage.getItem('token')}`,
+        }
+    };
+    const data = {
+        'layout': localStorage.getItem('dashboard-layout')
+    };
+    axios.post('http://localhost:3000/saveLayout', data, headers);
+    localStorage.clear();
+
+    return {
+        // toggles
+        type: AUTH_USER,
+        payload: ''
     }
-
-
-}
+} 

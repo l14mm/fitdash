@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -23,30 +22,28 @@ const theme = createMuiTheme({
   },
 });
 
-const App = ({ children }) => {
-  return (
-    <MuiThemeProvider theme={theme}>
+const App = ({ children }) => (
+  <MuiThemeProvider theme={theme}>
+    <div style={{
+      backgroundColor: "rgb(245, 245, 245)",
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <Header />
       <div style={{
-        backgroundColor: "rgb(245, 245, 245)",
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column'
+        flex: '1 0 auto',
+        padding: '20px'
       }}>
-        <Header />
-        <div style={{
-          flex: '1 0 auto',
-          padding: '20px'
-        }}>
-          {children}
-        </div>
-        <Footer />
+        {children}
       </div>
-    </MuiThemeProvider >
-  )
-};
+      <Footer />
+    </div>
+  </MuiThemeProvider >
+);
 
 App.propTypes = {
-  children: PropTypes.shape({}).isRequired
+  children: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
 export default App;

@@ -12,7 +12,7 @@ export default function (state = INITIAL_STATE, action) {
         case AUTH_ERROR:
             return { ...state, errorMessage: action.payload };
         case USER_DETAILS:
-            return { ...state, username: action.payload.username, layout: action.payload.layout, errorMessage: action.payload }
+            return { ...state, username: action.payload.username, layout: action.payload.layout }
         default:
             return state;
     }
