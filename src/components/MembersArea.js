@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
-
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
 import ResponsiveGridLayout from './ResponsiveGridLayout';
 import MapWithASearchBox from './Maps/MapWithASearchBox';
+import MFPPieChartPCF from './MFPPieChartPCF';
+import MFPPieChartCals from './MFPPieChartCals';
 
 const styles = theme => ({
     card: {
@@ -69,9 +71,24 @@ class MembersArea extends Component {
                         </div>
                         <div key="3" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
                             <Paper square className={classes.paper}>
-                            
+                                <MFPPieChartPCF />
                             </Paper>
                         </div>
+                        <div key="4" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                            <Paper square className={classes.paper}>
+                                <MFPPieChartCals />
+                            </Paper>
+                        </div>
+                        {/* <div key="5" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                            <Paper square className={classes.paper}>
+                                <ScaleSVG
+                                    width={400}
+                                    height={400}
+                                >
+                                    <FancyPie width={800} height={800} margin={20} />
+                                </ScaleSVG>
+                            </Paper>
+                        </div> */}
                     </ResponsiveGridLayout>
                 ) : (<div />)}
             </div >
