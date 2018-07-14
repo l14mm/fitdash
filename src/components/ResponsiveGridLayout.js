@@ -8,7 +8,6 @@ function getFromLS(key) {
   if (global.localStorage) {
     try {
       ls = JSON.parse(global.localStorage.getItem("dashboard-layout")) || {};
-      console.log(ls)
     } catch (e) {
       /* Ignore */
     }

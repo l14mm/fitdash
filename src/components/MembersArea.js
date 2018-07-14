@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
 import ResponsiveGridLayout from './ResponsiveGridLayout';
-import BarGraph from './BarGraph';
+import MapWithASearchBox from './Maps/MapWithASearchBox';
 
 const styles = theme => ({
     card: {
@@ -64,12 +64,12 @@ class MembersArea extends Component {
                         </div>
                         <div key="2" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
                             <Paper square className={classes.paper}>
-                                {/* <MapWithASearchBox /> */}
+                                <MapWithASearchBox />
                             </Paper>
                         </div>
                         <div key="3" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
                             <Paper square className={classes.paper}>
-                                <BarGraph data={[5, 10, 1, 3, 5, 5, 10]} size={[500, 500]} />
+                            
                             </Paper>
                         </div>
                     </ResponsiveGridLayout>

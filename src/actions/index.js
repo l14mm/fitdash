@@ -36,7 +36,6 @@ export const getUserDetails = (callback) => async dispatch => {
             }
         });
         // Send to middlewares and reducers
-        console.log(response.data);
         dispatch({ type: USER_DETAILS, payload: response.data });
         callback();
     } catch (e) {
