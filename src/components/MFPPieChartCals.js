@@ -13,7 +13,7 @@ export default class MFPPieChartCals extends Component {
     }
 
     componentDidMount() {
-        this.regenData();
+        // this.regenData();
     }
 
     regenData = () => {
@@ -31,8 +31,15 @@ export default class MFPPieChartCals extends Component {
         const inner = 80;
         const outer = 100;
         return (
-            <span style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div style={{ flex: 9 }}>
+            <span style={{ 
+                // display: 'flex', flexDirection: 'column',
+                 height: '100%'
+                 }}>
+                <span style={{ 
+                    // flex: 9
+                    // display: 'block',
+                    // height: '90%'
+                     }}>
                     <ResponsiveContainer>
                         <PieChart onMouseEnter={this.onPieEnter}>
                             <Pie
@@ -44,6 +51,7 @@ export default class MFPPieChartCals extends Component {
                                 fill="#8884d8"
                                 paddingAngle={5}
                                 dataKey="value"
+                                label
                             >
                                 {
                                     data.map((entry, index) => <Cell key={COLORS[index % COLORS.length]} fill={COLORS[index % COLORS.length]} />)
@@ -54,8 +62,10 @@ export default class MFPPieChartCals extends Component {
                             </p>
                         </PieChart>
                     </ResponsiveContainer>
-                </div>
-                <div style={{ flex: 1 }}>Calories: {data[0].value}</div>
+                </span>
+                {/* <div style={{ 
+                    // flex: 1
+                     }}>Calories: {data[0].value}</div> */}
             </span>
         )
     }

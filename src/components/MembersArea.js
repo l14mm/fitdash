@@ -10,6 +10,7 @@ import ResponsiveGridLayout from './ResponsiveGridLayout';
 import MapWithASearchBox from './Maps/MapWithASearchBox';
 import MFPPieChartPCF from './MFPPieChartPCF';
 import MFPPieChartCals from './MFPPieChartCals';
+import MFPCalsLine from './MFPCalsLine';
 
 const styles = theme => ({
     card: {
@@ -77,6 +78,11 @@ class MembersArea extends Component {
                         <div key="4" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
                             <Paper square className={classes.paper}>
                                 <MFPPieChartCals />
+                            </Paper>
+                        </div>
+                        <div key="5" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                            <Paper square className={classes.paper}>
+                                <MFPCalsLine />
                             </Paper>
                         </div>
                         {/* <div key="5" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>

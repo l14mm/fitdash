@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PieChart, Pie, Cell } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 const COLORS = ['#2ecc71', '#3498db', '#e74c3c'];
 
@@ -30,22 +30,24 @@ export default class MFPPieChartPCF extends Component {
     render() {
         const { data } = this.state;
         return (
-            <PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
-                <Pie
-                    data={data}
-                    cx={120}
-                    cy={200}
-                    innerRadius={80}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    paddingAngle={5}
-                    dataKey="value"
-                >
-                    {
-                        data.map((entry, index) => <Cell key={COLORS[index % COLORS.length]} fill={COLORS[index % COLORS.length]} />)
-                    }
-                </Pie>
-            </PieChart >
+            <ResponsiveContainer>
+                <PieChart onMouseEnter={this.onPieEnter}>
+                    <Pie
+                        data={data}
+                        // cx={120}
+                        // cy={200}
+                        innerRadius={80}
+                        outerRadius={100}
+                        fill="#8884d8"
+                        paddingAngle={5}
+                        dataKey="value"
+                    >
+                        {
+                            data.map((entry, index) => <Cell key={COLORS[index % COLORS.length]} fill={COLORS[index % COLORS.length]} />)
+                        }
+                    </Pie>
+                </PieChart>
+            </ResponsiveContainer>
         )
     }
 }
