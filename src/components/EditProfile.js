@@ -81,9 +81,7 @@ const renderTextField = ({
         <TextField
             // hintText={label}
             // floatingLabelText={label}
-            label={value}
-            value={123}
-            defaultValue="123"
+            label={label}
             className={className}
             // errorText={touched && error}
             {...input}
@@ -108,7 +106,7 @@ class EditProfile extends Component {
         this.props.getUserDetails((data) => {
             this.setState({
                 dashboardReady: true,
-                ...data
+                // ...data
             })
         });
     }
@@ -132,20 +130,21 @@ class EditProfile extends Component {
     }
 
     render() {
-        const { classes, handleSubmit } = this.props;
-        const { user, mfpUsername } = this.state;
-        console.log(mfpUsername)
+        const { classes, handleSubmit, mfpUsername } = this.props;
+        const { user } = this.state;
         return (
             <div className={classes.root}>
                 <Card className={classes.card}>
                     <form className={classes.form} onSubmit={handleSubmit(this.onSubmit)}>
                         <div className={classes.hint}>Edit Profile</div>
                         <Field
-                            name="firstName"
-                            component="input"
+                            name="mfpUsername"
                             type="text"
-                            placeholder="First Name"
-                            value="13"
+                            label="MyFitnessPal Username"
+                            id="mfpUsername"
+                            component={renderTextField}
+                            className={classes.textField}
+                            required
                         />
                         <div>
                             {this.props.errorMessage}
@@ -165,13 +164,21 @@ class EditProfile extends Component {
 function mapStateToProps(state) {
     return {
         username: state.auth.username,
-        layout: state.auth.layout
+        layout: state.auth.layout,
+        mfpUsername: state.auth.mfpUsername
     }
 }
 
 export default compose(
     requireAuth,
-    connect(mapStateToProps, actions),
-    reduxForm({ form: 'editproflie' }),
+    // connect(mapStateToProps, actions),
+    connect(
+        // state => ({
+        //     // initialValues: { mfpUsername: '123' } // pull initial values from account reducer
+        // }),
+        mapStateToProps,
+        actions // bind account loading action creator
+    ),
+    reduxForm({ form: 'editprofile' }),
     withStyles(styles)
 )(EditProfile);
