@@ -4,8 +4,15 @@ import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
+import AddIcon from '@material-ui/icons/Add';
+import Icon from '@material-ui/core/Icon';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SettingsIcon from '@material-ui/icons/Settings';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
+
 import ResponsiveGridLayout from './ResponsiveGridLayout';
 import MapWithASearchBox from './Maps/MapWithASearchBox';
 import MFPPieChartPCF from './MFPPieChartPCF';
@@ -29,10 +36,19 @@ const styles = theme => ({
         // padding: theme.spacing.unit * 2,
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        height: '100%'
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column'
     },
     grid: {
         // alignItems: 'stretch'
+    },
+    button: {
+        // margin: theme.spacing.unit,
+    },
+    deleteContainer: {
+
     }
 })
 
@@ -41,61 +57,141 @@ class MembersArea extends Component {
         super(props);
 
         this.state = {
-            dashboardReady: false
+            dashboardReady: false,
+            containers: [
+                {
+                    data:
+                        <div>
+                            Name: {this.props.username}
+                        </div>,
+                    key: 'welcomeMessage',
+                    minWidth: 2,
+                    minHeight: 2
+                },
+                {
+                    data:
+                        <MapWithASearchBox />,
+                    key: 'googleMapsSearch',
+                    minWidth: 4,
+                    minHeight: 10
+                },
+                {
+                    data:
+                        <MFPPieChartPCF />,
+                    key: 'mfpPieChartPCF',
+                    minWidth: 4,
+                    minHeight: 10
+                },
+                {
+                    data:
+                        <MFPPieChartCals />,
+                    key: 'mfpPieChartCals',
+                    minWidth: 4,
+                    minHeight: 10
+                },
+                {
+                    data:
+                        <MFPCalsLine />,
+                    key: 'mfpCalsLine',
+                    minWidth: 2,
+                    minHeight: 3
+                },
+            ]
         };
 
         this.props.getUserDetails(() => {
-            if (this.props.layout !== undefined) {
+            if (this.props.layout !== undefined && !localStorage.getItem('dashboard-layout')) {
                 localStorage.setItem('dashboard-layout', this.props.layout)
             }
             this.setState({ dashboardReady: true })
         });
     }
 
+    handleAddNewContainer = () => {
+        const { containers } = this.state;
+        containers.push({
+            data:
+                <div />,
+            key: `container-${containers.length}-${Math.random() * 100}`,
+            minWidth: 4,
+            minHeight: 4
+        })
+        this.setState({ containers })
+    }
+
+    handleDeleteContainer = (key) => {
+        const { containers } = this.state;
+        const newContainers = containers.filter(item => item.key !== key);
+        this.setState({ containers: newContainers })
+    }
+
     render() {
-        const { classes, username } = this.props;
+        const { classes } = this.props;
+        const { containers } = this.state;
         return (
             <div className={classes.root}>
                 {this.state.dashboardReady ? (
-                    <ResponsiveGridLayout>
-                        <div key="1" data-grid={{ w: 2, h: 3, x: 0, y: 0, minW: 2, minH: 3 }}>
-                            <Paper square className={classes.paper}>
-                                <div>
-                                    Name: {username}
+                    <span>
+                        {/* <Button variant="fab" color="primary" aria-label="add" className={classes.button}>
+                            <AddIcon />
+                        </Button> */}
+                        <IconButton onClick={this.handleAddNewContainer} color="primary" aria-label="add" className={classes.button}>
+                            <AddIcon />
+                        </IconButton>
+                        <ResponsiveGridLayout>
+                            {containers.map((item, index) => (
+                                <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
+                                    <Paper square className={classes.paper}>
+                                        <div>
+                                            <IconButton onClick={() => this.handleDeleteContainer(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer}>
+                                                <DeleteIcon style={{ fontSize: 20 }} />
+                                            </IconButton>
+                                            <IconButton color="primary" aria-label="settings" className={classes.deleteContainer}>
+                                                <SettingsIcon style={{ fontSize: 20 }} />
+                                            </IconButton>
+                                        </div>
+                                        <div style={{ flex: 1, width: '100%' }}>
+                                            {item.data}
+                                        </div>
+                                    </Paper>
                                 </div>
-                            </Paper>
-                        </div>
-                        <div key="2" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                            <Paper square className={classes.paper}>
-                                <MapWithASearchBox />
-                            </Paper>
-                        </div>
-                        <div key="3" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                            <Paper square className={classes.paper}>
-                                <MFPPieChartPCF />
-                            </Paper>
-                        </div>
-                        <div key="4" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                            <Paper square className={classes.paper}>
-                                <MFPPieChartCals />
-                            </Paper>
-                        </div>
-                        <div key="5" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                            <Paper square className={classes.paper}>
-                                <MFPCalsLine />
-                            </Paper>
-                        </div>
-                        {/* <div key="5" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                            <Paper square className={classes.paper}>
-                                <ScaleSVG
-                                    width={400}
-                                    height={400}
-                                >
-                                    <FancyPie width={800} height={800} margin={20} />
-                                </ScaleSVG>
-                            </Paper>
-                        </div> */}
-                    </ResponsiveGridLayout>
+                            ))}
+                            {/* <div key="7" isDraggable={false} data-grid={{ w: 2, h: 3, x: 0, y: 0, minW: 6, minH: 3 }}>
+                                <Paper square className={classes.paper}>
+                                    <div>
+                                        Name: {username}
+                                    </div>
+                                </Paper>
+                            </div> */}
+                            {/* <div key="1" data-grid={{ w: 2, h: 3, x: 0, y: 0, minW: 2, minH: 3 }}>
+                                <Paper square className={classes.paper}>
+                                    <div>
+                                        Name: {username}
+                                    </div>
+                                </Paper>
+                            </div>
+                            <div key="2" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                                <Paper square className={classes.paper}>
+                                    <MapWithASearchBox />
+                                </Paper>
+                            </div>
+                            <div key="3" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                                <Paper square className={classes.paper}>
+                                    <MFPPieChartPCF />
+                                </Paper>
+                            </div>
+                            <div key="4" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                                <Paper square className={classes.paper}>
+                                    <MFPPieChartCals />
+                                </Paper>
+                            </div>
+                            <div key="5" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                                <Paper square className={classes.paper}>
+                                    <MFPCalsLine />
+                                </Paper>
+                            </div> */}
+                        </ResponsiveGridLayout>
+                    </span>
                 ) : (<div />)}
             </div >
         )

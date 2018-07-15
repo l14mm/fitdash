@@ -14,6 +14,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import MembersArea from './components/MembersArea'
 import Logout from './components/Logout';
+import EditProfile from "./components/EditProfile";
 
 const store = createStore(
   reducers,
@@ -30,6 +31,7 @@ ReactDOM.render(
         <Route path='/login' component={Login} />
         <Route path='/logout' component={Logout} />
         <Route path='/membersarea' component={MembersArea} />
+        <Route path='/editprofile' component={EditProfile} />
       </App>
     </Router>
   </Provider>

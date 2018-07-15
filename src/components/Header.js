@@ -37,6 +37,16 @@ class Header extends Component {
         if (this.props.authenticated) {
             return (
                 <span>
+                    <Link to="/membersarea" className={classes.link}>
+                        <Button className={classes.title}>
+                            Members Area
+                    </Button>
+                    </Link>
+                    <Link to="/editprofile" className={classes.link}>
+                        <Button className={classes.title}>
+                            Edit Profile
+                        </Button>
+                    </Link>
                     <Link to="/logout" className={classes.link}>
                         <Button className={classes.title}>
                             Logout
@@ -73,11 +83,6 @@ class Header extends Component {
                         </Typography>
                     </Link>
                     <div className={classes.toolbarRight}>
-                        <Link to="/membersarea" className={classes.link}>
-                            <Button className={classes.title}>
-                                Members Area
-                        </Button>
-                        </Link>
                         {this.renderLinks(classes)}
                     </div>
                 </Toolbar>

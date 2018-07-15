@@ -37,11 +37,32 @@ export const getUserDetails = (callback) => async dispatch => {
         });
         // Send to middlewares and reducers
         dispatch({ type: USER_DETAILS, payload: response.data });
-        callback();
+        callback(response.data);
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Invalid login details" })
     }
 };
+
+export const saveDetails = (formProps, callback) => async dispatch => {
+    try {
+        const headers = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${localStorage.getItem('token')}`,
+            }
+        };
+        const data = {
+            // 'layout': localStorage.getItem('dashboard-layout')
+            'mfpUsername': formProps.mfpUsername
+        };
+        const response = axios.post('http://localhost:3000/saveDetails', data, headers);
+        // Send to middlewares and reducers
+        dispatch({ type: USER_DETAILS, payload: response.data });
+        callback();
+    } catch (e) {
+        dispatch({ type: AUTH_ERROR, payload: "Can't save details" })
+    }
+}
 
 export const logout = () => {
     const headers = {
@@ -53,7 +74,7 @@ export const logout = () => {
     const data = {
         'layout': localStorage.getItem('dashboard-layout')
     };
-    axios.post('http://localhost:3000/saveLayout', data, headers);
+    axios.post('http://localhost:3000/saveDetails', data, headers);
     localStorage.clear();
 
     return {
