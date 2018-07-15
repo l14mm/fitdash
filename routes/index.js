@@ -16,11 +16,13 @@ function tokenForUser(user) {
 }
 
 router.get('/userDetails', requireAuth, function (req, res, next) {
-  res.json({ username: req.user.username, layout: req.user.layout });
+  res.json({ username: req.user.username, mfpUsername: req.user.mfpUsername, layout: req.user.layout });
 });
 
-router.post('/saveLayout', requireAuth, function (req, res, next) {
-  User.findOneAndUpdate({ username: req.user.username }, { layout: req.body.layout }, { new: false }, function (err, doc) {
+router.post('/saveDetails', requireAuth, function (req, res, next) {
+  console.log(req.body)
+
+  User.findOneAndUpdate({ username: req.user.username }, { layout: req.body.layout, mfpUsername: req.body.mfpUsername }, { new: false }, function (err, doc) {
     if (err) { return next(err); }
 
   });

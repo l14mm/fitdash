@@ -22,12 +22,16 @@ var UserSchema = new Schema({
   layout: {
     type: Object,
     required: false
+  },
+  mfpUsername: {
+    type: String,
+    required: false
   }
 });
 
-UserSchema.methods.comparePassword = function(candidatePassword, callback) {
-  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    if(err){return callback(err);}
+UserSchema.methods.comparePassword = function (candidatePassword, callback) {
+  bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+    if (err) { return callback(err); }
 
     callback(null, isMatch);
   })
@@ -44,7 +48,7 @@ UserSchema.statics.authenticate = function (username, password, callback) {
         err.status = 401;
         return callback(err);
       }
-      bcrypt.hash(user.password, 10, function (err, hash){
+      bcrypt.hash(user.password, 10, function (err, hash) {
         if (err) {
           return next(err);
         }
@@ -65,9 +69,9 @@ UserSchema.pre('save', function (next) {
   var user = this;
 
   // Generate a salt then hash
-  bcrypt.genSalt(10, function(err, salt) {
+  bcrypt.genSalt(10, function (err, salt) {
     // Hash password using salt
-    bcrypt.hash(user.password, 10, function (err, hash){
+    bcrypt.hash(user.password, 10, function (err, hash) {
       if (err) {
         return next(err);
       }
