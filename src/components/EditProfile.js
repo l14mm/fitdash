@@ -113,7 +113,6 @@ class EditProfile extends Component {
 
     onSubmit = (formProps) => {
         this.props.saveDetails(formProps, () => {
-            // this.props.history.push('/membersarea');
             console.log('details saved!')
         });
     }
@@ -131,12 +130,14 @@ class EditProfile extends Component {
 
     render() {
         const { classes, handleSubmit, mfpUsername } = this.props;
-        const { user } = this.state;
+        const { user, dashboardReady } = this.state;
         return (
             <div className={classes.root}>
+            {dashboardReady ? (
                 <Card className={classes.card}>
                     <form className={classes.form} onSubmit={handleSubmit(this.onSubmit)}>
                         <div className={classes.hint}>Edit Profile</div>
+                        {}
                         <Field
                             name="mfpUsername"
                             type="text"
@@ -156,6 +157,7 @@ class EditProfile extends Component {
                         <CardActions className={classes.actions} />
                     </form>
                 </Card>
+            ):(<div />)}
             </div>
         )
     }
@@ -165,20 +167,13 @@ function mapStateToProps(state) {
     return {
         username: state.auth.username,
         layout: state.auth.layout,
-        mfpUsername: state.auth.mfpUsername
+        initialValues: { mfpUsername: state.auth.mfpUsername }
     }
 }
 
 export default compose(
     requireAuth,
-    // connect(mapStateToProps, actions),
-    connect(
-        // state => ({
-        //     // initialValues: { mfpUsername: '123' } // pull initial values from account reducer
-        // }),
-        mapStateToProps,
-        actions // bind account loading action creator
-    ),
-    reduxForm({ form: 'editprofile' }),
+    connect(mapStateToProps, actions),
+    reduxForm({ form: 'editprofile', enableReinitialize: true }),
     withStyles(styles)
 )(EditProfile);

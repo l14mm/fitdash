@@ -27,6 +27,24 @@ export const login = (formProps, callback) => async dispatch => {
     }
 };
 
+export const getMFP = (callback) => async dispatch => {
+    try {
+        const response = await axios.get('http://localhost:8000/getweek/', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${localStorage.getItem('token')}`,
+            }
+        });
+        console.log(response)
+        // Send to middlewares and reducers
+        dispatch({ type: USER_DETAILS, payload: response.data });
+        // console.log(response.data)
+        callback(response.data);
+    } catch (e) {
+        dispatch({ type: AUTH_ERROR, payload: "Invalid login details" })
+    }
+};
+
 export const getUserDetails = (callback) => async dispatch => {
     try {
         const response = await axios.get('http://localhost:3000/userDetails', {
@@ -37,6 +55,7 @@ export const getUserDetails = (callback) => async dispatch => {
         });
         // Send to middlewares and reducers
         dispatch({ type: USER_DETAILS, payload: response.data });
+        // console.log(response.data)
         callback(response.data);
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Invalid login details" })

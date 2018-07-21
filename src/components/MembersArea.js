@@ -58,53 +58,61 @@ class MembersArea extends Component {
 
         this.state = {
             dashboardReady: false,
-            containers: [
-                {
-                    data:
-                        <div>
-                            Name: {this.props.username}
-                        </div>,
-                    key: 'welcomeMessage',
-                    minWidth: 2,
-                    minHeight: 2
-                },
-                {
-                    data:
-                        <MapWithASearchBox />,
-                    key: 'googleMapsSearch',
-                    minWidth: 4,
-                    minHeight: 10
-                },
-                {
-                    data:
-                        <MFPPieChartPCF />,
-                    key: 'mfpPieChartPCF',
-                    minWidth: 4,
-                    minHeight: 10
-                },
-                {
-                    data:
-                        <MFPPieChartCals />,
-                    key: 'mfpPieChartCals',
-                    minWidth: 4,
-                    minHeight: 10
-                },
-                {
-                    data:
-                        <MFPCalsLine />,
-                    key: 'mfpCalsLine',
-                    minWidth: 2,
-                    minHeight: 3
-                },
-            ]
         };
+
+        this.props.getMFP(() => {
+            
+        })
 
         this.props.getUserDetails(() => {
             if (this.props.layout !== undefined && !localStorage.getItem('dashboard-layout')) {
                 localStorage.setItem('dashboard-layout', this.props.layout)
             }
-            this.setState({ dashboardReady: true })
+            this.setState({
+                dashboardReady: true,
+                containers: [
+                    {
+                        data:
+                            <div>
+                                Name: {this.props.username}
+                            </div>,
+                        key: 'welcomeMessage',
+                        minWidth: 2,
+                        minHeight: 2
+                    },
+                    {
+                        data:
+                            <MapWithASearchBox />,
+                        key: 'googleMapsSearch',
+                        minWidth: 4,
+                        minHeight: 10
+                    },
+                    {
+                        data:
+                            <MFPPieChartPCF />,
+                        key: 'mfpPieChartPCF',
+                        minWidth: 4,
+                        minHeight: 10
+                    },
+                    {
+                        data:
+                            <MFPPieChartCals />,
+                        key: 'mfpPieChartCals',
+                        minWidth: 4,
+                        minHeight: 10
+                    },
+                    {
+                        data:
+                            <MFPCalsLine />,
+                        key: 'mfpCalsLine',
+                        minWidth: 2,
+                        minHeight: 3
+                    },
+                ]
+            })
         });
+
+
     }
 
     handleAddNewContainer = () => {
