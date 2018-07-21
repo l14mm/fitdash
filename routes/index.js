@@ -20,9 +20,9 @@ router.get('/userDetails', requireAuth, function (req, res, next) {
 });
 
 router.post('/saveDetails', requireAuth, function (req, res, next) {
-  console.log(req.body)
-
-  User.findOneAndUpdate({ username: req.user.username }, { layout: req.body.layout, mfpUsername: req.body.mfpUsername }, { new: false }, function (err, doc) {
+  User.findOneAndUpdate({ username: req.user.username }, {
+    ...req.body
+  }, { new: false }, function (err, doc) {
     if (err) { return next(err); }
 
   });
