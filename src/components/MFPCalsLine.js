@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { withStyles } from "@material-ui/core/styles"
 
-const data = [
+var data = [
     {
         id: 'calories',
-        completed: Math.round(2200 / 2400 * 100)
+        completed: Math.round(1000 / 2400 * 100)
     }
 ];
 
@@ -18,12 +18,18 @@ const styles = {
 class MFPCalsLine extends Component {
     constructor(props) {
         super(props);
+        // console.log(this.props.data)
+        if (this.props.data !== null) {
+            // console.log(this.props.data)
+            this.data = this.props.data;
+        }
         this.state = {
-            playersData: data.map(item => ({ ...item, completed: 0 }))
+            playersData: this.props.data != null ? this.props.data.map(item => ({ ...item, completed: 0 })) : data.map(item => ({ ...item, completed: 0 }))
         };
     }
 
     componentDidMount() {
+        console.log(this.state.playersData)
         this.timer = setTimeout(() => this.progress(5), 100);
     }
 
@@ -57,7 +63,7 @@ class MFPCalsLine extends Component {
         return (
             <div>
                 <LinearProgress color="primary" className={classes.progress} variant="determinate" value={playersData[0].completed} />
-                <p>Calories: {playersData[0].completed * 2400 / 100}</p>
+                <p>Calories: {playersData[0].completed / 100}</p>
             </div>
         );
     }

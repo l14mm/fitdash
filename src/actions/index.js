@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AUTH_USER, AUTH_ERROR, USER_DETAILS } from './types'
+import { AUTH_USER, AUTH_ERROR, USER_DETAILS, USER_DETAILS_MFP } from './types'
 
 // dispatch: funnels through action -> middleware -> reducer
 // do whatever we want inside action creator
@@ -35,9 +35,9 @@ export const getMFP = (callback) => async dispatch => {
                 'Authorization': `bearer ${localStorage.getItem('token')}`,
             }
         });
-        console.log(response)
+        console.log(response);
         // Send to middlewares and reducers
-        dispatch({ type: USER_DETAILS, payload: response.data });
+        dispatch({ type: USER_DETAILS_MFP, payload: response.data });
         // console.log(response.data)
         callback(response.data);
     } catch (e) {

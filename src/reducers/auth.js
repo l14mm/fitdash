@@ -1,4 +1,4 @@
-import { AUTH_USER, AUTH_ERROR, USER_DETAILS } from '../actions/types';
+import { AUTH_USER, AUTH_ERROR, USER_DETAILS, USER_DETAILS_MFP } from '../actions/types';
 
 const INITIAL_STATE = {
     authentication: '',
@@ -13,6 +13,8 @@ export default function (state = INITIAL_STATE, action) {
             return { ...state, errorMessage: action.payload };
         case USER_DETAILS:
             return { ...state, username: action.payload.username, layout: action.payload.layout, mfpUsername: action.payload.mfpUsername }
+        case USER_DETAILS_MFP:
+            return { ...state,  mfp: action.payload }
         default:
             return state;
     }

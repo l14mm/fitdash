@@ -3,6 +3,8 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import * as actions from '../actions';
+import requireAuth from './requireAuth';
 
 import AddIcon from '@material-ui/icons/Add';
 import Icon from '@material-ui/core/Icon';
@@ -10,8 +12,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import * as actions from '../actions';
-import requireAuth from './requireAuth';
 
 import ResponsiveGridLayout from './ResponsiveGridLayout';
 import MapWithASearchBox from './Maps/MapWithASearchBox';
@@ -39,7 +39,8 @@ const styles = theme => ({
         height: '100%',
         display: 'flex',
         alignItems: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        overflowY: 'auto'
     },
     grid: {
         // alignItems: 'stretch'
@@ -61,7 +62,26 @@ class MembersArea extends Component {
         };
 
         this.props.getMFP(() => {
-            
+            // console.log(this.props.mfp)
+            var newContainers = this.state.containers;
+            newContainers.push(
+                {
+                    data:
+                        this.props.mfp.map(day =>
+                            // <div>
+                            //     <p>Date: {day.date}</p>
+                            //     <p>Target calories: {day.goals.calories}</p>
+                            //     <p>Actual calories: {day.totals.calories}</p>
+                            // </div>
+                            <MFPCalsLine data={
+                                [{'id': 'calories', 'completed': 0.6}]
+                            } />,
+                        ),
+                    key: 'welcomeMessage2',
+                    minWidth: 2,
+                    minHeight: 6
+                })
+            this.setState({ containers: newContainers });
         })
 
         this.props.getUserDetails(() => {
@@ -209,6 +229,7 @@ class MembersArea extends Component {
 function mapStateToProps(state) {
     return {
         username: state.auth.username,
+        mfp: state.auth.mfp,
         layout: state.auth.layout
     }
 }

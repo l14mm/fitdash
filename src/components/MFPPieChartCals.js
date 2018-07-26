@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import * as actions from '../actions';
+import requireAuth from './requireAuth';
 
 const COLORS = ['#2ecc71', '#e74c3c'];
 
-export default class MFPPieChartCals extends Component {
+class MFPPieChartCals extends Component {
     constructor(props) {
         super(props);
 
@@ -14,6 +18,14 @@ export default class MFPPieChartCals extends Component {
 
     componentDidMount() {
         // this.regenData();
+    }
+
+    componentDidUpdate() {
+        // console.log('update')
+        // console.log(this.props.mfp)
+        // this.setState({
+        //     data: [{ name: 'Calories', value: this.props.mfp[0].totals.calories }, { name: 'Calorie Goal', value: this.props.mfp[0].goals.calories }]
+        // });
     }
 
     regenData = () => {
@@ -27,19 +39,20 @@ export default class MFPPieChartCals extends Component {
     }
 
     render() {
-        const { data } = this.state;
+        const data = this.props.mfp || this.state.data;
+        const { mfp } = this.props;
         const inner = 80;
         const outer = 100;
         return (
-            <span style={{ 
+            <span style={{
                 // display: 'flex', flexDirection: 'column',
-                 height: '100%'
-                 }}>
-                <span style={{ 
+                height: '100%'
+            }}>
+                <span style={{
                     // flex: 9
                     // display: 'block',
                     // height: '90%'
-                     }}>
+                }}>
                     <ResponsiveContainer>
                         <PieChart onMouseEnter={this.onPieEnter}>
                             <Pie
@@ -70,3 +83,18 @@ export default class MFPPieChartCals extends Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    console.log(state.auth.mfp)
+    return {
+        // mfp: state.auth.mfp,
+        mfp: state.auth.mfp === undefined ? null : [{ name: 'Calories', value: state.auth.mfp[0].totals.calories }, { name: 'Calorie Goal', value: state.auth.mfp[0].goals.calories - state.auth.mfp[0].totals.calories }]
+    }
+}
+
+export default compose(
+    // requireAuth,
+    connect(mapStateToProps, actions),
+    // WidthProvider(Responsive),
+    // withStyles(styles)
+)(MFPPieChartCals);
