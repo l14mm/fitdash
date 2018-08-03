@@ -5,8 +5,19 @@ from pygments.styles import get_all_styles
 from datetime import datetime
 
 class Mfp(models.Model):
-    name = models.TextField()
-    data = JSONField(null=True, blank=True)
+    username = models.CharField(max_length=100)
+
+class MfpData(models.Model):
+    album = models.ForeignKey(Mfp, related_name='mfpData', on_delete=models.CASCADE)
+    date = models.CharField(max_length=100)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ['date']
+
+class Goals(models.Model):
+    album = models.ForeignKey(MfpData, related_name='goals', on_delete=models.CASCADE)
+    date = models.CharField(max_length=100)
+    calories = models.IntegerField()
+
+    class Meta:
+        ordering = ['date']
