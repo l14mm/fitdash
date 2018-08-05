@@ -1,24 +1,23 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from snippets.models import Mfp, MfpData, Goals
+from snippets.models import Mfp, MfpData, Goals, Totals
 
 class GoalsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goals
-        fields = ('date', 'calories')
+        fields = ('fiber', 'carbohydrates', 'calories', 'fat', 'sugar', 'protein')
+
+class TotalsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Totals
+        fields = ('fiber', 'carbohydrates', 'calories', 'fat', 'sugar', 'protein')
 
 class MfpDataSerializer(serializers.ModelSerializer):
     goals = GoalsSerializer(many=True)
+    totals = TotalsSerializer(many=True)
     class Meta:
         model = MfpData
-        fields = ('date', 'goals')
-
-    def create(self, validated_data):
-        tracks_data = validated_data.pop('goals')
-        album = MfpData.objects.create(**validated_data)
-        for track_data in tracks_data:
-            Goals.objects.create(album=album, **track_data)
-        return album
+        fields = ('date', 'goals', 'totals')
 
 class MfpSerializer(serializers.ModelSerializer):
     mfpData = MfpDataSerializer(many=True)
@@ -28,7 +27,13 @@ class MfpSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         tracks_data = validated_data.pop('mfpData')
-        album = Mfp.objects.create(**validated_data)
+        mfp = Mfp.objects.create(**validated_data)
         for track_data in tracks_data:
-            MfpData.objects.create(album=album, **track_data)
-        return album
+            goals = track_data.pop('goals')
+            totals = track_data.pop('totals')
+            mfpData = MfpData.objects.create(album=mfp, **track_data)
+            for goal in goals:
+                Goals.objects.create(album=mfpData, **goal)
+            for total in totals:
+                Totals.objects.create(album=mfpData, **total)
+        return mfp

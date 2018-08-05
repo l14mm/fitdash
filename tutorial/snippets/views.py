@@ -13,6 +13,7 @@ import datetime
 from datetime import timedelta
 import requests
 
+
 def getMfpData():
     client = myfitnesspal.Client('premiumliam')
 
@@ -50,7 +51,6 @@ class GetWeek(APIView):
             ],
         }
         serializer = MfpSerializer(data=data)
-
 
         # queryset = Mfp.objects.all()
         # queryset = queryset.filter(artist='Danger Mouse')
@@ -97,51 +97,70 @@ class GetWeek(APIView):
             # while startDate < endDate:
             #     day = client.get_date(startDate)
             #     days.append({
-            #         'date': day.date,
+            #         'date': str(day.date),
             #         'totals': day.totals,
             #         'goals': day.goals
             #     })
             #     startDate += timedelta(days=1)
 
+            # data = {
+            #     "username": "username",
+            #     "mfpData": days
+            # }
+            # print(data)
+
             data = {
-                "username": "youvegotliam",
+                "username": username,
                 "mfpData": [
                     {
-                        "date": "10",
-                        "calories": 245
-                    },
+                        "date": "2018-07-29",
+                        "goals": [{
+                            "fiber": 0,
+                            "carbohydrates": 0,
+                            "calories": 0,
+                            "fat": 0,
+                            "sugar": 0,
+                            "protein": 0
+                        }],
+                        "totals": [{
+                            "fiber": 15,
+                            "carbohydrates": 372,
+                            "calories": 2324,
+                            "fat": 29,
+                            "sugar": 3,
+                            "protein": 140
+                        }]
+                    }
                 ]
             }
 
-            data = {
+            data2 = {
                 "username": "youvegotliam",
                 "mfpData": [
                     {
                         "date": "2018-07-27",
                         "goals": [{
-                            "date": "10",
-                            "calories": 245
-                            # "fiber": 0,
-                            # "carbohydrates": 0,
-                            # "calories": 0,
-                            # "fat": 0,
-                            # "sugar": 0,
-                            # "protein": 0
+                            "fiber": 24,
+                            "carbohydrates": 343,
+                            "calories": 2286,
+                            "fat": 42,
+                            "sugar": 23,
+                            "protein": 142
+                        }],
+                        "totals": [{
+                            "fiber": 24,
+                            "carbohydrates": 343,
+                            "calories": 2286,
+                            "fat": 42,
+                            "sugar": 23,
+                            "protein": 142
                         }]
-                        # "totals": {
-                        #     "fiber": 24,
-                        #     "carbohydrates": 343,
-                        #     "calories": 2286,
-                        #     "fat": 42,
-                        #     "sugar": 23,
-                        #     "protein": 142
-                        # }
                     }
                 ]
             }
 
             serializer = MfpSerializer(data=data)
-            
+
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
