@@ -13,8 +13,8 @@ class TotalsSerializer(serializers.ModelSerializer):
         fields = ('fiber', 'carbohydrates', 'calories', 'fat', 'sugar', 'protein')
 
 class MfpDataSerializer(serializers.ModelSerializer):
-    goals = GoalsSerializer(many=True)
-    totals = TotalsSerializer(many=True)
+    goals = GoalsSerializer()
+    totals = TotalsSerializer()
     class Meta:
         model = MfpData
         fields = ('date', 'goals', 'totals')
@@ -31,9 +31,7 @@ class MfpSerializer(serializers.ModelSerializer):
         for track_data in tracks_data:
             goals = track_data.pop('goals')
             totals = track_data.pop('totals')
-            mfpData = MfpData.objects.create(album=mfp, **track_data)
-            for goal in goals:
-                Goals.objects.create(album=mfpData, **goal)
-            for total in totals:
-                Totals.objects.create(album=mfpData, **total)
+            goals = Goals.objects.create(**goals)
+            totals = Totals.objects.create(**totals)
+            mfpData = MfpData.objects.create(album=mfp, goals=goals, totals=totals, **track_data)
         return mfp
