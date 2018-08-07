@@ -2,13 +2,6 @@ import React, { Component } from "react";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { withStyles } from "@material-ui/core/styles"
 
-var data = [
-    {
-        id: 'calories',
-        completed: Math.round(1000 / 2400 * 100)
-    }
-];
-
 const styles = {
     progress: {
         height: '20px'
@@ -18,18 +11,36 @@ const styles = {
 class MFPCalsLine extends Component {
     constructor(props) {
         super(props);
-        // console.log(this.props.data)
+
+        let data = [
+            {
+                id: 'calories',
+                completed: this.props.completed
+            }
+        ];
+
         if (this.props.data !== null) {
-            // console.log(this.props.data)
-            this.data = this.props.data;
+            ({ data } = this.props);
         }
+
         this.state = {
-            playersData: this.props.data != null ? this.props.data.map(item => ({ ...item, completed: 0 })) : data.map(item => ({ ...item, completed: 0 }))
-        };
+            data
+        }
     }
 
     componentDidMount() {
-        console.log(this.state.playersData)
+        const data = [
+            {
+                id: 'calories',
+                completed: this.props.completed
+            }
+        ];
+
+        this.setState({
+            data,
+            playersData: this.props.data != null ? this.props.data.map(item => ({ ...item, completed: 0 })) : data.map(item => ({ ...item, completed: 0 }))
+        })
+        
         this.timer = setTimeout(() => this.progress(5), 100);
     }
 
@@ -40,7 +51,7 @@ class MFPCalsLine extends Component {
     progress(completion) {
         let done = 0;
         this.setState({
-            playersData: data.map((item, i) => {
+            playersData: this.state.data.map((item, i) => { // eslint-disable-line react/no-access-state-in-setstate
                 const { completed: current } = this.state.playersData[i];
                 const { completed: max } = item;
                 if (current + completion >= max) {
@@ -52,7 +63,7 @@ class MFPCalsLine extends Component {
                 };
             })
         });
-        if (done < data.length) {
+        if (done < this.state.data.length) {
             this.timer = setTimeout(() => this.progress(5), 100);
         }
     }
@@ -61,10 +72,14 @@ class MFPCalsLine extends Component {
         const { playersData } = this.state;
         const { classes } = this.props;
         return (
-            <div>
-                <LinearProgress color="primary" className={classes.progress} variant="determinate" value={playersData[0].completed} />
-                <p>Calories: {playersData[0].completed / 100}</p>
-            </div>
+            playersData ?
+                (
+                    <div>
+                        <LinearProgress color="primary" className={classes.progress} variant="determinate" value={playersData[0].completed} />
+                        <p>Calories: {playersData[0].completed / 100}</p>
+                    </div>
+                )
+                : (<div />)
         );
     }
 }

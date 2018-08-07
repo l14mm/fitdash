@@ -1,26 +1,13 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import AddIcon from '@material-ui/icons/Add';
-import Icon from '@material-ui/core/Icon';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SettingsIcon from '@material-ui/icons/Settings';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-
-
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import TextField from "@material-ui/core/TextField";
 import { reduxForm, Field } from 'redux-form';
-import MFPCalsLine from './MFPCalsLine';
-import MFPPieChartCals from './MFPPieChartCals';
-import MFPPieChartPCF from './MFPPieChartPCF';
-import MapWithASearchBox from './Maps/MapWithASearchBox';
-import ResponsiveGridLayout from './ResponsiveGridLayout';
 import requireAuth from './requireAuth';
 import * as actions from '../actions';
 
@@ -79,11 +66,11 @@ const renderTextField = ({
     ...custom
 }) => (
         <TextField
-            // hintText={label}
-            // floatingLabelText={label}
+            hintText={label}
+            floatingLabelText={label}
             label={label}
             className={className}
-            // errorText={touched && error}
+            errorText={touched && error}
             {...input}
             {...custom}
         />
@@ -99,14 +86,12 @@ class EditProfile extends Component {
                 username: "username1",
                 email: "email1",
                 password: "password1",
-            },
-            submitted: false
+            }
         };
 
-        this.props.getUserDetails((data) => {
+        this.props.getUserDetails(() => {
             this.setState({
                 dashboardReady: true,
-                // ...data
             })
         });
     }
@@ -129,8 +114,8 @@ class EditProfile extends Component {
     }
 
     render() {
-        const { classes, handleSubmit, mfpUsername } = this.props;
-        const { user, dashboardReady } = this.state;
+        const { classes, handleSubmit } = this.props;
+        const { dashboardReady } = this.state;
         return (
             <div className={classes.root}>
             {dashboardReady ? (

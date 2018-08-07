@@ -5,7 +5,7 @@ import { AUTH_USER, AUTH_ERROR, USER_DETAILS, USER_DETAILS_MFP } from './types'
 // do whatever we want inside action creator
 export const register = (formProps, callback) => async dispatch => {
     try {
-        const response = await axios.post('http://localhost:3000/register', formProps);
+        const response = await axios.post('http://localhost:3011/register', formProps);
         // Send to middlewares and reducers
         dispatch({ type: AUTH_USER, payload: response.data.token });
         localStorage.setItem('token', response.data.token);
@@ -17,7 +17,7 @@ export const register = (formProps, callback) => async dispatch => {
 
 export const login = (formProps, callback) => async dispatch => {
     try {
-        const response = await axios.post('http://localhost:3000/login', formProps);
+        const response = await axios.post('http://localhost:3011/login', formProps);
         // Send to middlewares and reducers
         dispatch({ type: AUTH_USER, payload: response.data.token });
         localStorage.setItem('token', response.data.token);
@@ -29,7 +29,7 @@ export const login = (formProps, callback) => async dispatch => {
 
 export const getMFP = (callback) => async dispatch => {
     try {
-        const response = await axios.get('http://localhost:8000/getweek/', {
+        const response = await axios.get('http://localhost:8000/getweek', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `bearer ${localStorage.getItem('token')}`,
@@ -47,7 +47,7 @@ export const getMFP = (callback) => async dispatch => {
 
 export const getUserDetails = (callback) => async dispatch => {
     try {
-        const response = await axios.get('http://localhost:3000/userDetails', {
+        const response = await axios.get('http://localhost:3011/userDetails', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `bearer ${localStorage.getItem('token')}`,
@@ -74,7 +74,7 @@ export const saveDetails = (formProps, callback) => async dispatch => {
             // 'layout': localStorage.getItem('dashboard-layout')
             'mfpUsername': formProps.mfpUsername
         };
-        const response = axios.post('http://localhost:3000/saveDetails', data, headers);
+        const response = axios.post('http://localhost:3011/saveDetails', data, headers);
         // Send to middlewares and reducers
         dispatch({ type: USER_DETAILS, payload: response.data });
         callback();
@@ -93,7 +93,7 @@ export const logout = () => {
     const data = {
         'layout': localStorage.getItem('dashboard-layout')
     };
-    axios.post('http://localhost:3000/saveDetails', data, headers);
+    axios.post('http://localhost:3011/saveDetails', data, headers);
     localStorage.clear();
 
     return {

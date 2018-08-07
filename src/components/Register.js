@@ -74,12 +74,12 @@ const renderTextField = ({
   ...custom
 }) => (
     <TextField
-      // hintText={label}
-      // floatingLabelText={label}
+      hintText={label}
+      floatingLabelText={label}
       label={label}
       value="value"
       className={className}
-      // errorText={touched && error}
+      errorText={touched && error}
       {...input}
       {...custom}
     />
@@ -96,8 +96,7 @@ class Register extends Component {
         username: "username1",
         email: "email1",
         password: "password1",
-      },
-      submitted: false
+      }
     };
   }
 
