@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "PORT=3011 node ./bin/www",
-    "devstart": "nodemon ./bin/www"
+    "devstart": "PORT=3011 nodemon ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^3.0.0",
