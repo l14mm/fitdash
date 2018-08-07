@@ -36,18 +36,19 @@ def getMfpData():
 
 class GetWeek(APIView):
     def get(self, response, *args, **kwargs):
-        jwt = response.META.get('HTTP_JWT')
-
+        jwt = response.META.get('HTTP_AUTHORIZATION')
+        
         url = 'http://localhost:3011/userDetails'
-        headers = {'Authorization': 'bearer ' + jwt}
+        headers = {'Authorization': jwt}
         r = requests.get(url, headers=headers)
 
         username = r.json()['username']
         userData = Mfp.objects.filter(username=username)
+        if userData:
+            userData = Mfp.objects.get(username=username)
         
         if userData:
-            serializer = MfpSerializer(userData, many=True)
-
+            serializer = MfpSerializer(userData)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             client = myfitnesspal.Client('premiumliam')
