@@ -61,11 +61,8 @@ class MembersArea extends Component {
         };
 
         this.props.getUserDetails(() => {
-            if (this.props.layout !== undefined && !localStorage.getItem('dashboard-layout')) {
-                localStorage.setItem('dashboard-layout', this.props.layout)
-            }
+            localStorage.setItem('dashboard-layout', this.props.layout)
             this.setState({
-                dashboardReady: true,
                 containers: [
                     {
                         data:
@@ -85,26 +82,40 @@ class MembersArea extends Component {
                             data:
                                 <div style={{ display: "flex", flexWrap: "wrap" }}>
                                     {this.props.mfp.mfpData.map(day => (
-                                    <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", minWidth: "200px" }}>
-                                        <p>{day.date}</p>
-                                        <p>Target calories: {day.goals.calories}</p>
-                                        <p>Actual calories: {day.totals.calories}</p>
-                                        <MFPCalsLine completed={(day.totals.calories / day.goals.calories) * 100} />
-                                    </div>)
-                                )}
+                                        <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", minWidth: "200px" }}>
+                                            <p>{day.date}</p>
+                                            <p>Target calories: {day.goals.calories}</p>
+                                            <p>Actual calories: {day.totals.calories}</p>
+                                            <MFPCalsLine completed={(day.totals.calories / day.goals.calories) * 100} />
+                                        </div>)
+                                    )}
                                 </div>
                             ,
                             key: "mfpcals",
                             minWidth: 2,
                             minHeight: 10
                         })
-                    this.setState({ containers: newContainers });
+                    this.setState({
+                        containers: newContainers,
+                        dashboardReady: true
+                    });
                 })
             }
             )
         });
+    }
 
+    componentDidMount() {
+        window.addEventListener('beforeunload',
+            this.props.saveDetails(() => {
+                console.log('details saved!')
+            })
+        );
+    }
 
+    componentWillUnmount() {
+        this.componentCleanup();
+        window.removeEventListener('beforeunload', this.componentCleanup); // remove the event handler for normal unmounting
     }
 
     handleAddNewContainer = () => {
@@ -153,7 +164,7 @@ class MembersArea extends Component {
                                     </Paper>
                                 </div>
                             ))}
-                            <div key="2" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
+                            {/* <div key="2" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
                                 <Paper square className={classes.paper}>
                                     <MapWithASearchBox />
                                 </Paper>
@@ -172,7 +183,7 @@ class MembersArea extends Component {
                                 <Paper square className={classes.paper}>
                                     <MFPCalsLine />
                                 </Paper>
-                            </div>
+                            </div> */}
                         </ResponsiveGridLayout>
                     </span>
                 ) : (<div />)}

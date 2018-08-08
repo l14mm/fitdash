@@ -70,10 +70,15 @@ export const saveDetails = (formProps, callback) => async dispatch => {
                 'Authorization': `bearer ${localStorage.getItem('token')}`,
             }
         };
-        const data = {
-            // 'layout': localStorage.getItem('dashboard-layout')
-            'mfpUsername': formProps.mfpUsername
+        let data = {
+            'layout': localStorage.getItem('dashboard-layout'),
         };
+        if (formProps) {
+            data = {
+                'layout': localStorage.getItem('dashboard-layout'),
+                'mfpUsername': formProps.mfpUsername
+            };
+        }
         const response = axios.post('http://localhost:3011/saveDetails', data, headers);
         // Send to middlewares and reducers
         dispatch({ type: USER_DETAILS, payload: response.data });

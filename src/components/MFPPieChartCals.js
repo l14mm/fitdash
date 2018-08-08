@@ -63,7 +63,10 @@ class MFPPieChartCals extends Component {
 }
 
 function mapStateToProps(state) {
-    const { totals, goals } = state.auth.mfp.mfpData[0];
+    let { totals, goals } = 0;
+    if (state.auth.mfp) {
+        ({ totals, goals } = state.auth.mfp.mfpData[0]);
+    }
     return !state.auth.mfp ? null : {
         mfp: (state.auth.mfp === undefined) ? null : [{ name: 'Calories', value: totals.calories }, { name: 'Calorie Goal', value: goals.calories - totals.calories }]
     }
