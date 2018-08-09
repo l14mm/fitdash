@@ -83,10 +83,10 @@ class MembersArea extends Component {
                                 <div style={{ display: "flex", flexWrap: "wrap" }}>
                                     {this.props.mfp.mfpData.map(day => (
                                         <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", minWidth: "200px" }}>
-                                            <p>{day.date}</p>
-                                            <p>Target calories: {day.goals.calories}</p>
-                                            <p>Actual calories: {day.totals.calories}</p>
-                                            <MFPCalsLine completed={(day.totals.calories / day.goals.calories) * 100} />
+                                            <MFPCalsLine
+                                                date={new Date(day.date).toDateString()}
+                                                actual={day.totals.calories}
+                                                goal={day.goals.calories} />
                                         </div>)
                                     )}
                                 </div>
@@ -95,13 +95,29 @@ class MembersArea extends Component {
                             minWidth: 2,
                             minHeight: 10
                         })
+                    let goals = 0;
+                    let totals = 0;
+                    for (let i = 0; i < this.props.mfp.mfpData.length; i++) {
+                        goals += this.props.mfp.mfpData[i].goals.calories;
+                        totals += this.props.mfp.mfpData[i].totals.calories;
+                    }
+                    newContainers.push(
+                        {
+                            data:
+                                <div style={{ height: "100%" }}>
+                                    <MFPPieChartCals actual={totals} goal={goals} remaining={goals - totals} />
+                                </div>
+                            ,
+                            key: "mfpcals-chat",
+                            minWidth: 2,
+                            minHeight: 10
+                        })
                     this.setState({
                         containers: newContainers,
                         dashboardReady: true
                     });
                 })
-            }
-            )
+            })
         });
     }
 

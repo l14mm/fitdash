@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import * as actions from '../actions';
 
 const COLORS = ['#2ecc71', '#e74c3c'];
 
-class MFPPieChartCals extends Component {
+export default class MFPPieChartCals extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            data: [{ name: 'Calories', value: 400 }, { name: 'Calorie Goal', value: 300 }]
+            data: [{ name: 'Calories', value: this.props.actual }, { name: 'Calorie Goal', value: this.props.remaining }]
         }
     }
 
@@ -71,9 +68,3 @@ function mapStateToProps(state) {
         mfp: (state.auth.mfp === undefined) ? null : [{ name: 'Calories', value: totals.calories }, { name: 'Calorie Goal', value: goals.calories - totals.calories }]
     }
 }
-
-export default compose(
-    connect(mapStateToProps, actions),
-    // WidthProvider(Responsive),
-    // withStyles(styles)
-)(MFPPieChartCals);
