@@ -58,6 +58,7 @@ class MembersArea extends Component {
 
         this.state = {
             dashboardReady: false,
+            containerHovered: -1
         };
 
         this.props.getUserDetails(() => {
@@ -67,7 +68,7 @@ class MembersArea extends Component {
                     {
                         data:
                             <div>
-                                Name: {this.props.username}
+                                Welcome {this.props.username} to your new fitness dashboard!
                             </div>,
                         key: 'welcomeMessage',
                         minWidth: 2,
@@ -77,14 +78,15 @@ class MembersArea extends Component {
             }, () => {
                 const newContainers = this.state.containers;
                 this.props.getMFP(() => {
+                    this.props.mfp.mfpData.reverse();
                     newContainers.push(
                         {
                             data:
                                 <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                    {this.props.mfp.mfpData.map(day => (
-                                        <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", minWidth: "200px" }}>
+                                    {this.props.mfp.mfpData.map((day, index) => (
+                                        <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", flexGrow: 1 }}>
                                             <MFPCalsLine
-                                                date={new Date(day.date).toDateString()}
+                                                date={index === 0 ? "Today" : new Date(day.date).toDateString()}
                                                 actual={day.totals.calories}
                                                 goal={day.goals.calories} />
                                         </div>)
@@ -152,9 +154,13 @@ class MembersArea extends Component {
         this.setState({ containers: newContainers })
     }
 
+    hoverButton = (index) => {
+        this.setState({ containerHovered: index === false ? -1 : index });
+    }
+
     render() {
         const { classes } = this.props;
-        const { containers } = this.state;
+        const { containers, containerHovered } = this.state;
         return (
             <div className={classes.root}>
                 {this.state.dashboardReady ? (
@@ -163,16 +169,17 @@ class MembersArea extends Component {
                             <AddIcon />
                         </IconButton>
                         <ResponsiveGridLayout>
-                            {containers.map((item) => (
+                            {containers.map((item, index) => (
                                 <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                                     <Paper square className={classes.paper}>
-                                        <div>
-                                            <IconButton onClick={() => this.handleDeleteContainer(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer}>
+                                        <div style={{ height: "20px", width: "100%", display: "grid" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
+                                            {containerHovered === index ? (<span><IconButton onClick={() => this.handleDeleteContainer(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{height:"auto"}}>
                                                 <DeleteIcon style={{ fontSize: 20 }} />
                                             </IconButton>
-                                            <IconButton color="primary" aria-label="settings" className={classes.deleteContainer}>
+                                            <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{height:"auto"}}>
                                                 <SettingsIcon style={{ fontSize: 20 }} />
-                                            </IconButton>
+                                            </IconButton></span>) : (<div />)}
+
                                         </div>
                                         <div style={{ flex: 1, width: '100%' }}>
                                             {item.data}
