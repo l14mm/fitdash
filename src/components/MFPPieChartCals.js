@@ -27,34 +27,28 @@ export default class MFPPieChartCals extends Component {
         const inner = 80;
         const outer = 100;
         return (
-            <span style={{
-                height: '100%'
-            }}>
-                <span>
-                    <ResponsiveContainer>
-                        <PieChart onMouseEnter={this.onPieEnter}>
-                            <Pie
-                                data={data}
-                                // cx={120}
-                                // cy={200}
-                                innerRadius={inner}
-                                outerRadius={outer}
-                                fill="#8884d8"
-                                paddingAngle={5}
-                                dataKey="value"
-                                label
-                            >
-                                {
-                                    data.map((entry, index) => <Cell key={COLORS[index % COLORS.length]} fill={COLORS[index % COLORS.length]} />)
-                                }
-                            </Pie>
-                            <p>
-                                Calories: {data[0].value}
-                            </p>
-                        </PieChart>
-                    </ResponsiveContainer>
-                </span>
-            </span>
+            <ResponsiveContainer width="100%" height="100%">
+                <PieChart onMouseEnter={this.onPieEnter}>
+                    <Pie
+                        data={data}
+                        // cx={120}
+                        // cy={200}
+                        innerRadius={inner}
+                        outerRadius={outer}
+                        fill="#8884d8"
+                        paddingAngle={5}
+                        dataKey="value"
+                        label
+                    >
+                        {
+                            data.map((entry, index) => <Cell key={COLORS[index % COLORS.length]} fill={COLORS[index % COLORS.length]} />)
+                        }
+                    </Pie>
+                    <p>
+                        Calories: {data[0].value}
+                    </p>
+                </PieChart>
+            </ResponsiveContainer>
         )
     }
 }

@@ -8,6 +8,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
@@ -32,7 +33,6 @@ const styles = theme => ({
         flexGrow: 1,
     },
     paper: {
-        // padding: theme.spacing.unit * 2,
         textAlign: 'center',
         color: theme.palette.text.secondary,
         height: '100%',
@@ -97,9 +97,20 @@ class MembersArea extends Component {
                             minWidth: 2,
                             minHeight: 10
                         })
+                        newContainers.push(
+                            {
+                                data:
+                                    <div style={{ display: "flex", flexWrap: "wrap", height: "calc(100% - 10px)", alignItems: "center", justifyContent: "center" }}>
+                                        <CircularProgress />
+                                    </div>
+                                ,
+                                key: "loading",
+                                minWidth: 2,
+                                minHeight: 4
+                            })
                     let goals = 0;
                     let totals = 0;
-                    for (let i = 0; i < this.props.mfp.mfpData.length; i++) {
+                    for (let i = 0; i < this.props.mfp.mfpData.length; i += 1) {
                         goals += this.props.mfp.mfpData[i].goals.calories;
                         totals += this.props.mfp.mfpData[i].totals.calories;
                     }
@@ -110,8 +121,8 @@ class MembersArea extends Component {
                                     <MFPPieChartCals actual={totals} goal={goals} remaining={goals - totals} />
                                 </div>
                             ,
-                            key: "mfpcals-chat",
-                            minWidth: 2,
+                            key: "mfpcals-chart",
+                            minWidth: 4,
                             minHeight: 10
                         })
                     this.setState({
@@ -124,16 +135,17 @@ class MembersArea extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('beforeunload',
-            this.props.saveDetails(() => {
-                console.log('details saved!')
-            })
-        );
+        window.addEventListener('beforeunload', this.saveDetails());
     }
 
     componentWillUnmount() {
-        this.componentCleanup();
-        window.removeEventListener('beforeunload', this.componentCleanup); // remove the event handler for normal unmounting
+        window.removeEventListener('beforeunload', this.saveDetails());
+    }
+
+    saveDetails = () => {
+        this.props.saveDetails(() => {
+            console.log('details saved!')
+        })
     }
 
     handleAddNewContainer = () => {
@@ -172,16 +184,16 @@ class MembersArea extends Component {
                             {containers.map((item, index) => (
                                 <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                                     <Paper square className={classes.paper}>
-                                        <div style={{ height: "20px", width: "100%", display: "grid" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
-                                            {containerHovered === index ? (<span><IconButton onClick={() => this.handleDeleteContainer(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{height:"auto"}}>
+                                        <div style={{ height: "20px", width: "100%", display: "table" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
+                                            {containerHovered === index ? (<span><IconButton onClick={() => this.handleDeleteContainer(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
                                                 <DeleteIcon style={{ fontSize: 20 }} />
                                             </IconButton>
-                                            <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{height:"auto"}}>
+                                            <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
                                                 <SettingsIcon style={{ fontSize: 20 }} />
                                             </IconButton></span>) : (<div />)}
 
                                         </div>
-                                        <div style={{ flex: 1, width: '100%' }}>
+                                        <div style={{ height: "100%", width: '100%' }}>
                                             {item.data}
                                         </div>
                                     </Paper>
