@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 import myfitnesspal
 import logging
 import datetime
-from datetime import timedelta
+from datetime import timedelta, datetime
 import requests
 
 
@@ -45,20 +45,49 @@ class GetWeek(APIView):
         username = r.json()['username']
         userData = Mfp.objects.filter(username=username)
         if userData:
-            userData = Mfp.objects.get(username=username)
+            userData = userData[len(userData)-1]
         
         if userData:
             serializer = MfpSerializer(userData)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            if datetime.now().date() > datetime.strptime(serializer.data["mfpData"][len(serializer.data["mfpData"]) - 1].items()[0][1], '%Y-%m-%d').date():
+                client = myfitnesspal.Client('premiumliam')
+
+                endDate = datetime.now().date()
+                startDate = endDate - timedelta(days=7)
+
+                days = []
+
+                while startDate <= endDate:
+                    day = client.get_date(startDate)
+                    days.append({
+                        'date': str(day.date),
+                        'totals': day.totals,
+                        'goals': day.goals
+                    })
+                    startDate += timedelta(days=1)
+
+                data = {
+                    "username": username,
+                    "mfpData": days
+                }
+
+                serializer = MfpSerializer(data=data)
+
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             client = myfitnesspal.Client('premiumliam')
 
-            endDate = datetime.datetime.now().date()
+            endDate = datetime.now().date()
             startDate = endDate - timedelta(days=7)
 
             days = []
 
-            while startDate < endDate:
+            while startDate <= endDate:
                 day = client.get_date(startDate)
                 days.append({
                     'date': str(day.date),
