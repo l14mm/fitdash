@@ -8,7 +8,13 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
@@ -58,7 +64,8 @@ class MembersArea extends Component {
 
         this.state = {
             dashboardReady: false,
-            containerHovered: -1
+            containerHovered: -1,
+            open: false
         };
 
         this.props.getUserDetails(() => {
@@ -97,17 +104,6 @@ class MembersArea extends Component {
                             minWidth: 2,
                             minHeight: 10
                         })
-                        newContainers.push(
-                            {
-                                data:
-                                    <div style={{ display: "flex", flexWrap: "wrap", height: "calc(100% - 10px)", alignItems: "center", justifyContent: "center" }}>
-                                        <CircularProgress />
-                                    </div>
-                                ,
-                                key: "loading",
-                                minWidth: 2,
-                                minHeight: 4
-                            })
                     let goals = 0;
                     let totals = 0;
                     for (let i = 0; i < this.props.mfp.mfpData.length; i += 1) {
@@ -160,10 +156,19 @@ class MembersArea extends Component {
         this.setState({ containers })
     }
 
-    handleDeleteContainer = (key) => {
+    handleClickDelete = (key) => {
+        this.setState({ open: true, containerToDelete: key })
+    }
+
+    handleClickConfirmDelete = () => {
+        this.setState({ open: false, containerToDelete: null });
         const { containers } = this.state;
-        const newContainers = containers.filter(item => item.key !== key);
+        const newContainers = containers.filter(item => item.key !== this.state.containerToDelete);
         this.setState({ containers: newContainers })
+    }
+
+    handleClickCancelDelete = () => {
+        this.setState({ open: false, containerToDelete: null });
     }
 
     hoverButton = (index) => {
@@ -180,18 +185,38 @@ class MembersArea extends Component {
                         <IconButton onClick={this.handleAddNewContainer} color="primary" aria-label="add" className={classes.button}>
                             <AddIcon />
                         </IconButton>
+                        <Dialog
+                                open={this.state.open}
+                                onClose={this.handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">Delete container?</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        Are you sure you want to delete this container?
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleClickCancelDelete} color="primary">
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={this.handleClickConfirmDelete} color="primary" autoFocus>
+                                        Delete
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
                         <ResponsiveGridLayout>
                             {containers.map((item, index) => (
                                 <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                                     <Paper square className={classes.paper}>
                                         <div style={{ height: "20px", width: "100%", display: "table" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
-                                            {containerHovered === index ? (<span><IconButton onClick={() => this.handleDeleteContainer(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
+                                            {containerHovered === index ? (<span><IconButton onClick={() => this.handleClickDelete(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
                                                 <DeleteIcon style={{ fontSize: 20 }} />
                                             </IconButton>
-                                            <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
-                                                <SettingsIcon style={{ fontSize: 20 }} />
-                                            </IconButton></span>) : (<div />)}
-
+                                                <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
+                                                    <SettingsIcon style={{ fontSize: 20 }} />
+                                                </IconButton></span>) : (<div />)}
                                         </div>
                                         <div style={{ height: "100%", width: '100%' }}>
                                             {item.data}
@@ -199,26 +224,6 @@ class MembersArea extends Component {
                                     </Paper>
                                 </div>
                             ))}
-                            {/* <div key="2" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                                <Paper square className={classes.paper}>
-                                    <MapWithASearchBox />
-                                </Paper>
-                            </div>
-                            <div key="3" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                                <Paper square className={classes.paper}>
-                                    <MFPPieChartPCF />
-                                </Paper>
-                            </div>
-                            <div key="4" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                                <Paper square className={classes.paper}>
-                                    <MFPPieChartCals />
-                                </Paper>
-                            </div>
-                            <div key="5" data-grid={{ w: 4, h: 12, x: 2, y: 0, minW: 2, minH: 3 }}>
-                                <Paper square className={classes.paper}>
-                                    <MFPCalsLine />
-                                </Paper>
-                            </div> */}
                         </ResponsiveGridLayout>
                     </span>
                 ) : (<div />)}

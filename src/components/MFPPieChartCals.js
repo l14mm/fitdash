@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import withLoader from './ContainerLoader';
 
 const COLORS = ['#2ecc71', '#e74c3c'];
 
-export default class MFPPieChartCals extends Component {
+class MFPPieChartCals extends Component {
     constructor(props) {
         super(props);
 
@@ -52,6 +53,8 @@ export default class MFPPieChartCals extends Component {
         )
     }
 }
+
+export default withLoader(MFPPieChartCals);
 
 function mapStateToProps(state) {
     let { totals, goals } = 0;
