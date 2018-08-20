@@ -54,7 +54,7 @@ class MFPPieChartCals extends Component {
     }
 }
 
-export default withLoader(MFPPieChartCals);
+export default MFPPieChartCals;
 
 function mapStateToProps(state) {
     let { totals, goals } = 0;

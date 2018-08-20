@@ -1,31 +1,29 @@
 import React, { Component } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const loader = (WrappedComponent) => 
-    class Container extends Component {
-        constructor() {
-            super();
-            this.state = {
-                loaded: false
-            }
-        }
-
-        componentDidMount() {
-            setTimeout(() => {
-                this.setState({ loaded: true })
-            }, 2000);
-        }
-
-        render() {
-            return (
-                <div style={{ display: "flex", flexWrap: "wrap", height: "calc(100% - 10px)", alignItems: "center", justifyContent: "center" }}>{
-                    !this.state.loaded ? (<CircularProgress size={50} />) : (
-                        <WrappedComponent {...this.props} />
-                    )}
-                </div>
-            )
+class Container extends Component {
+    constructor() {
+        super();
+        this.state = {
+            loaded: false
         }
     }
 
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({ loaded: true })
+        }, 2000);
+    }
 
-export default loader;
+    render() {
+        return (
+            <div style={{ display: "flex", flexWrap: "wrap", height: "calc(100% - 10px)", width: "100%", alignItems: "center", justifyContent: "center" }}>{
+                !this.props.ready ? (<CircularProgress size={50} />) : (
+                    { ...this.props.children }
+                )}
+            </div>
+        )
+    }
+}
+
+export default Container;

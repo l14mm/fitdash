@@ -24,6 +24,7 @@ import MapWithASearchBox from './Maps/MapWithASearchBox';
 import MFPPieChartPCF from './MFPPieChartPCF';
 import MFPPieChartCals from './MFPPieChartCals';
 import MFPCalsLine from './MFPCalsLine';
+import ContainerLoader from './ContainerLoader';
 
 const styles = theme => ({
     card: {
@@ -65,7 +66,8 @@ class MembersArea extends Component {
         this.state = {
             dashboardReady: false,
             containerHovered: -1,
-            open: false
+            open: false,
+            containers: []
         };
 
         this.props.getUserDetails(() => {
@@ -180,53 +182,57 @@ class MembersArea extends Component {
         const { containers, containerHovered } = this.state;
         return (
             <div className={classes.root}>
-                {this.state.dashboardReady ? (
-                    <span>
-                        <IconButton onClick={this.handleAddNewContainer} color="primary" aria-label="add" className={classes.button}>
-                            <AddIcon />
-                        </IconButton>
-                        <Dialog
-                                open={this.state.open}
-                                onClose={this.handleClose}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                            >
-                                <DialogTitle id="alert-dialog-title">Delete container?</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText id="alert-dialog-description">
-                                        Are you sure you want to delete this container?
+                <span>
+                    <IconButton onClick={this.handleAddNewContainer} color="primary" aria-label="add" className={classes.button}>
+                        <AddIcon />
+                    </IconButton>
+                    <Dialog
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">Delete container?</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure you want to delete this container?
                                     </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={this.handleClickCancelDelete} color="primary">
-                                        Cancel
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClickCancelDelete} color="primary">
+                                Cancel
                                     </Button>
-                                    <Button onClick={this.handleClickConfirmDelete} color="primary" autoFocus>
-                                        Delete
+                            <Button onClick={this.handleClickConfirmDelete} color="primary" autoFocus>
+                                Delete
                                     </Button>
-                                </DialogActions>
-                            </Dialog>
-                        <ResponsiveGridLayout>
-                            {containers.map((item, index) => (
-                                <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
-                                    <Paper square className={classes.paper}>
-                                        <div style={{ height: "20px", width: "100%", display: "table" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
-                                            {containerHovered === index ? (<span><IconButton onClick={() => this.handleClickDelete(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
-                                                <DeleteIcon style={{ fontSize: 20 }} />
-                                            </IconButton>
+                        </DialogActions>
+                    </Dialog>
+                    <ResponsiveGridLayout>
+                        {containers.map((item, index) => (
+                            <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
+                                <Paper square className={classes.paper}>
+                                    <div style={{ height: "20px", width: "100%", display: "table" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
+                                        {containerHovered === index ?
+                                            (<span>
+                                                <IconButton onClick={() => this.handleClickDelete(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
+                                                    <DeleteIcon style={{ fontSize: 20 }} />
+                                                </IconButton>
                                                 <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
                                                     <SettingsIcon style={{ fontSize: 20 }} />
-                                                </IconButton></span>) : (<div />)}
-                                        </div>
+                                                </IconButton>
+                                            </span>)
+                                            : (<div />)}
+                                    </div>
+                                    <ContainerLoader ready={this.state.dashboardReady}>
                                         <div style={{ height: "100%", width: '100%' }}>
                                             {item.data}
                                         </div>
-                                    </Paper>
-                                </div>
-                            ))}
-                        </ResponsiveGridLayout>
-                    </span>
-                ) : (<div />)}
+                                    </ContainerLoader>
+                                </Paper>
+                            </div>
+                        ))}
+                    </ResponsiveGridLayout>
+                </span>
             </div >
         )
     }
