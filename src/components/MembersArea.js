@@ -127,6 +127,8 @@ class MembersArea extends Component {
                         containers: newContainers,
                         dashboardReady: true
                     });
+                    localStorage.setItem('dashboard-layout', this.props.layout)
+                    this.grid.reloadLayout();
                 })
             })
         });
@@ -207,7 +209,7 @@ class MembersArea extends Component {
                                     </Button>
                         </DialogActions>
                     </Dialog>
-                    <ResponsiveGridLayout>
+                    <ResponsiveGridLayout ref={instance => { this.grid = instance; }}>
                         {containers.map((item, index) => (
                             <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                                 <Paper square className={classes.paper}>

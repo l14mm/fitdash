@@ -29,7 +29,6 @@ function saveToLS(key, value) {
 class ResponsiveLocalStorageLayout extends React.PureComponent {
   constructor(props) {
     super(props);
-
     this.state = {
       layouts: JSON.parse(JSON.stringify(getFromLS("layouts") || {}))
     };
@@ -46,6 +45,10 @@ class ResponsiveLocalStorageLayout extends React.PureComponent {
       cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
       rowHeight: 30
     };
+  }
+
+  reloadLayout = () => {
+    this.setState({layouts: JSON.parse(JSON.stringify(getFromLS("layouts") || {}))});
   }
 
   resetLayout() {

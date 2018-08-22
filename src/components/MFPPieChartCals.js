@@ -7,7 +7,7 @@ const COLORS = ['#2ecc71', '#e74c3c'];
 class MFPPieChartCals extends Component {
     constructor(props) {
         super(props);
-
+        
         this.state = {
             data: [{ name: 'Calories', value: this.props.actual }, { name: 'Calorie Goal', value: this.props.remaining }]
         }
