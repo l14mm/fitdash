@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import withLoader from './ContainerLoader';
 
 const COLORS = ['#2ecc71', '#e74c3c'];
 

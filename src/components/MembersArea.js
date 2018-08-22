@@ -25,6 +25,7 @@ import MFPPieChartPCF from './MFPPieChartPCF';
 import MFPPieChartCals from './MFPPieChartCals';
 import MFPCalsLine from './MFPCalsLine';
 import ContainerLoader from './ContainerLoader';
+import MFPTable from './MFPTable';
 
 const styles = theme => ({
     card: {
@@ -122,6 +123,17 @@ class MembersArea extends Component {
                             key: "mfpcals-chart",
                             minWidth: 4,
                             minHeight: 10
+                        })
+                    newContainers.push(
+                        {
+                            data:
+                                <div style={{ height: "100%" }}>
+                                    <MFPTable />
+                                </div>
+                            ,
+                            key: "mfpcals-table",
+                            minWidth: 6,
+                            minHeight: 8
                         })
                     this.setState({
                         containers: newContainers,
