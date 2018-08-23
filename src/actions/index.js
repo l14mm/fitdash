@@ -55,7 +55,6 @@ export const getUserDetails = (callback) => async dispatch => {
         });
         // Send to middlewares and reducers
         dispatch({ type: USER_DETAILS, payload: response.data });
-        // console.log(response.data)
         callback(response.data);
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Invalid login details" })

@@ -124,17 +124,17 @@ class MembersArea extends Component {
                             minWidth: 4,
                             minHeight: 10
                         })
-                    newContainers.push(
-                        {
-                            data:
-                                <div style={{ height: "100%" }}>
-                                    <MFPTable />
-                                </div>
-                            ,
-                            key: "mfpcals-table",
-                            minWidth: 6,
-                            minHeight: 8
-                        })
+                        newContainers.push(
+                            {
+                                data:
+                                    <div style={{ height: "100%" }}>
+                                        <MFPTable />
+                                    </div>
+                                ,
+                                key: "mfpcals-table",
+                                minWidth: 6,
+                                minHeight: 8
+                            })
                     this.setState({
                         containers: newContainers,
                         dashboardReady: true
@@ -221,7 +221,7 @@ class MembersArea extends Component {
                                     </Button>
                         </DialogActions>
                     </Dialog>
-                    <ResponsiveGridLayout ref={instance => { this.grid = instance; }}>
+                    <ResponsiveGridLayout saveDetails={this.props.saveDetails} ref={instance => { this.grid = instance; }}>
                         {containers.map((item, index) => (
                             <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                                 <Paper square className={classes.paper}>

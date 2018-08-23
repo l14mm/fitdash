@@ -37,6 +37,9 @@ class ResponsiveLocalStorageLayout extends React.PureComponent {
   onLayoutChange(layout, layouts) {
     saveToLS("layouts", layouts);
     this.setState({ layouts });
+    this.props.saveDetails(() => {
+        console.log('details saved!')
+    })
   }
 
   static get defaultProps() {
@@ -48,7 +51,7 @@ class ResponsiveLocalStorageLayout extends React.PureComponent {
   }
 
   reloadLayout = () => {
-    this.setState({layouts: JSON.parse(JSON.stringify(getFromLS("layouts") || {}))});
+    this.setState({ layouts: JSON.parse(JSON.stringify(getFromLS("layouts") || {})) });
   }
 
   resetLayout() {
