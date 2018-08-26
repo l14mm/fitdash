@@ -74,12 +74,12 @@ const renderTextField = ({
   ...custom
 }) => (
     <TextField
-      hintText={label}
-      floatingLabelText={label}
+      // hintText={label}
+      // floatingLabelText={label}
       label={label}
       value="value"
       className={className}
-      errorText={touched && error}
+      // errorText={touched && error}
       {...input}
       {...custom}
     />
@@ -160,13 +160,13 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  classes: PropTypes.shape.isRequired,
-  login: PropTypes.shape.isRequired,
-  history: PropTypes.shape.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  errorMessage: PropTypes.string,
-}
+// Login.propTypes = {
+//   classes: PropTypes.shape.isRequired,
+//   login: PropTypes.shape.isRequired,
+//   history: PropTypes.shape.isRequired,
+//   handleSubmit: PropTypes.func.isRequired,
+//   errorMessage: PropTypes.string,
+// }
 
 Login.defaultProps = {
   errorMessage: '',

@@ -89,8 +89,6 @@ class Register extends Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
-
     this.state = {
       user: {
         username: "username1",
@@ -106,7 +104,7 @@ class Register extends Component {
     });
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     const { id, value } = event.target;
     const { user } = this.state;
     this.setState({

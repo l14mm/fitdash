@@ -16,6 +16,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
 
@@ -124,17 +128,17 @@ class MembersArea extends Component {
                             minWidth: 4,
                             minHeight: 10
                         })
-                        newContainers.push(
-                            {
-                                data:
-                                    <div style={{ height: "100%" }}>
-                                        <MFPTable />
-                                    </div>
-                                ,
-                                key: "mfpcals-table",
-                                minWidth: 6,
-                                minHeight: 8
-                            })
+                    newContainers.push(
+                        {
+                            data:
+                                <div style={{ height: "100%" }}>
+                                    <MFPTable />
+                                </div>
+                            ,
+                            key: "mfpcals-table",
+                            minWidth: 6,
+                            minHeight: 8
+                        })
                     this.setState({
                         containers: newContainers,
                         dashboardReady: true
@@ -160,15 +164,25 @@ class MembersArea extends Component {
         })
     }
 
-    handleAddNewContainer = () => {
+    handleOpenNewContainerSelect = () => {
+        this.setState({ selectOpen: true });
+    }
+
+    handleCloseNewContainerSelect = () => {
+        this.setState({ selectOpen: false });
+    }
+
+    handleAddNewContainer = (e) => {
         const { containers } = this.state;
-        containers.push({
-            data:
-                <div />,
-            key: `container-${containers.length}-${Math.random() * 100}`,
-            minWidth: 4,
-            minHeight: 4
-        })
+        if (e.target.value === 1) {
+            containers.push({
+                data:
+                    <div />,
+                key: `container-${containers.length}-${Math.random() * 100}`,
+                minWidth: 4,
+                minHeight: 4
+            })
+        }
         this.setState({ containers })
     }
 
@@ -191,15 +205,35 @@ class MembersArea extends Component {
         this.setState({ containerHovered: index === false ? -1 : index });
     }
 
+
     render() {
         const { classes } = this.props;
         const { containers, containerHovered } = this.state;
+        console.log("open: " + this.state.selectOpen)
         return (
             <div className={classes.root}>
                 <span>
-                    <IconButton onClick={this.handleAddNewContainer} color="primary" aria-label="add" className={classes.button}>
+                    <IconButton
+                        // onClick={this.handleAddNewContainer} 
+                        onClick={this.handleOpenNewContainerSelect}
+                        color="primary" aria-label="add" className={classes.button} htmlFor="age-simple">
                         <AddIcon />
                     </IconButton>
+                    <InputLabel htmlFor="age-simple">Age</InputLabel>
+                    <Select
+                        open={this.state.selectOpen}
+                        onClose={this.handleCloseNewContainerSelect}
+                        onOpen={this.handleOpenNewContainerSelect}
+                        onChange={this.handleAddNewContainer}
+                        inputProps={{
+                            name: 'age',
+                            id: 'age-simple',
+                        }}
+                    >
+                        <MenuItem value={1}>Empty Container</MenuItem>
+                        <MenuItem value={2}>Empty Container</MenuItem>
+                        <MenuItem value={3}>Empty Container</MenuItem>
+                    </Select>
                     <Dialog
                         open={this.state.open}
                         onClose={this.handleClose}
@@ -210,15 +244,15 @@ class MembersArea extends Component {
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 Are you sure you want to delete this container?
-                                    </DialogContentText>
+                            </DialogContentText>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={this.handleClickCancelDelete} color="primary">
                                 Cancel
-                                    </Button>
+                            </Button>
                             <Button onClick={this.handleClickConfirmDelete} color="primary" autoFocus>
                                 Delete
-                                    </Button>
+                            </Button>
                         </DialogActions>
                     </Dialog>
                     <ResponsiveGridLayout saveDetails={this.props.saveDetails} ref={instance => { this.grid = instance; }}>
@@ -247,7 +281,7 @@ class MembersArea extends Component {
                         ))}
                     </ResponsiveGridLayout>
                 </span>
-            </div >
+            </div>
         )
     }
 }
