@@ -70,16 +70,15 @@ const renderTextField = ({
   label,
   value,
   className,
-  meta: { touched, error },
   ...custom
 }) => (
     <TextField
-      hintText={label}
-      floatingLabelText={label}
+      // hintText={label}
+      // floatingLabelText={label}
       label={label}
       value="value"
       className={className}
-      errorText={touched && error}
+      // errorText={touched && error}
       {...input}
       {...custom}
     />
@@ -179,9 +178,9 @@ class Register extends Component {
 }
 
 Register.propTypes = {
-  classes: PropTypes.shape.isRequired,
-  register: PropTypes.shape.isRequired,
-  history: PropTypes.shape.isRequired,
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  register: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleSubmit: PropTypes.func.isRequired,
   errorMessage: PropTypes.string.isRequired,
 }

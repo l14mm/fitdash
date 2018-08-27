@@ -70,16 +70,12 @@ const renderTextField = ({
   label,
   value,
   className,
-  meta: { touched, error },
   ...custom
 }) => (
     <TextField
-      // hintText={label}
-      // floatingLabelText={label}
       label={label}
       value="value"
       className={className}
-      // errorText={touched && error}
       {...input}
       {...custom}
     />

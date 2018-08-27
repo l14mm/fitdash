@@ -8,24 +8,20 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
 
 import ResponsiveGridLayout from './ResponsiveGridLayout';
-import MapWithASearchBox from './Maps/MapWithASearchBox';
-import MFPPieChartPCF from './MFPPieChartPCF';
+// import MapWithASearchBox from './Maps/MapWithASearchBox';
 import MFPPieChartCals from './MFPPieChartCals';
 import MFPCalsLine from './MFPCalsLine';
 import ContainerLoader from './ContainerLoader';
@@ -61,6 +57,9 @@ const styles = theme => ({
     },
     deleteContainer: {
 
+    },
+    selectMenu: {
+        display: 'none'
     }
 })
 
@@ -71,7 +70,8 @@ class MembersArea extends Component {
         this.state = {
             dashboardReady: false,
             containerHovered: -1,
-            open: false,
+            deleteOpen: false,
+            newContainerOpen: false,
             containers: []
         };
 
@@ -165,11 +165,11 @@ class MembersArea extends Component {
     }
 
     handleOpenNewContainerSelect = () => {
-        this.setState({ selectOpen: true });
+        this.setState({ newContainerOpen: true });
     }
 
     handleCloseNewContainerSelect = () => {
-        this.setState({ selectOpen: false });
+        this.setState({ newContainerOpen: false });
     }
 
     handleAddNewContainer = (e) => {
@@ -187,18 +187,18 @@ class MembersArea extends Component {
     }
 
     handleClickDelete = (key) => {
-        this.setState({ open: true, containerToDelete: key })
+        this.setState({ deleteOpen: true, containerToDelete: key })
     }
 
     handleClickConfirmDelete = () => {
-        this.setState({ open: false, containerToDelete: null });
+        this.setState({ deleteOpen: false, containerToDelete: null });
         const { containers } = this.state;
         const newContainers = containers.filter(item => item.key !== this.state.containerToDelete);
         this.setState({ containers: newContainers })
     }
 
     handleClickCancelDelete = () => {
-        this.setState({ open: false, containerToDelete: null });
+        this.setState({ deleteOpen: false, containerToDelete: null });
     }
 
     hoverButton = (index) => {
@@ -209,36 +209,33 @@ class MembersArea extends Component {
     render() {
         const { classes } = this.props;
         const { containers, containerHovered } = this.state;
-        console.log("open: " + this.state.selectOpen)
         return (
             <div className={classes.root}>
                 <span>
-                    <IconButton
-                        // onClick={this.handleAddNewContainer} 
-                        onClick={this.handleOpenNewContainerSelect}
-                        color="primary" aria-label="add" className={classes.button} htmlFor="age-simple">
-                        <AddIcon />
-                    </IconButton>
-                    <InputLabel htmlFor="age-simple">Age</InputLabel>
                     <Select
-                        open={this.state.selectOpen}
+                        IconComponent={() => (
+                            <IconButton
+                                onClick={this.handleOpenNewContainerSelect}
+                                color="primary"
+                                className={classes.button}
+                            >
+                                <AddIcon />
+                            </IconButton>
+                        )}
+                        disableUnderline
+                        classes={{ selectMenu: classes.selectMenu }}
+                        open={this.state.newContainerOpen}
                         onClose={this.handleCloseNewContainerSelect}
                         onOpen={this.handleOpenNewContainerSelect}
                         onChange={this.handleAddNewContainer}
-                        inputProps={{
-                            name: 'age',
-                            id: 'age-simple',
-                        }}
                     >
-                        <MenuItem value={1}>Empty Container</MenuItem>
-                        <MenuItem value={2}>Empty Container</MenuItem>
-                        <MenuItem value={3}>Empty Container</MenuItem>
+                        <MenuItem value={1}>Empty container</MenuItem>
+                        <MenuItem value={2}>Different container</MenuItem>
+                        <MenuItem value={3}>Another different container</MenuItem>
                     </Select>
                     <Dialog
-                        open={this.state.open}
+                        open={this.state.deleteOpen}
                         onClose={this.handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
                     >
                         <DialogTitle id="alert-dialog-title">Delete container?</DialogTitle>
                         <DialogContent>
