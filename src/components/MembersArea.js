@@ -68,7 +68,6 @@ class MembersArea extends Component {
         super(props);
 
         this.state = {
-            dashboardReady: false,
             containerHovered: -1,
             deleteOpen: false,
             newContainerOpen: false,
@@ -86,63 +85,59 @@ class MembersArea extends Component {
                             </div>,
                         key: 'welcomeMessage',
                         minWidth: 2,
-                        minHeight: 2
+                        minHeight: 2,
+                        ready: true
                     },
+                    {
+                        data: null,
+                        key: "mfpcals",
+                        minWidth: 2,
+                        minHeight: 10
+                    },
+                    {
+                        data: null,
+                        key: "mfpcals-chart",
+                        minWidth: 4,
+                        minHeight: 10
+                    },
+                    {
+                        data: null,
+                        key: "mfpcals-table",
+                        minWidth: 6,
+                        minHeight: 8
+                    }
                 ]
             }, () => {
-                const newContainers = this.state.containers;
                 this.props.getMFP(() => {
                     this.props.mfp.mfpData.reverse();
-                    newContainers.push(
-                        {
-                            data:
-                                <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                    {this.props.mfp.mfpData.map((day, index) => (
-                                        <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", flexGrow: 1 }}>
-                                            <MFPCalsLine
-                                                date={index === 0 ? "Today" : new Date(day.date).toDateString()}
-                                                actual={day.totals.calories}
-                                                goal={day.goals.calories} />
-                                        </div>)
-                                    )}
-                                </div>
-                            ,
-                            key: "mfpcals",
-                            minWidth: 2,
-                            minHeight: 10
-                        })
+                    this.addDataToContainer("mfpcals",
+                        <div style={{ display: "flex", flexWrap: "wrap" }}>
+                            {this.props.mfp.mfpData.map((day, index) => (
+                                <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", flexGrow: 1 }}>
+                                    <MFPCalsLine
+                                        date={index === 0 ? "Today" : new Date(day.date).toDateString()}
+                                        actual={day.totals.calories}
+                                        goal={day.goals.calories} />
+                                </div>)
+                            )}
+                        </div>
+                    )
                     let goals = 0;
                     let totals = 0;
                     for (let i = 0; i < this.props.mfp.mfpData.length; i += 1) {
                         goals += this.props.mfp.mfpData[i].goals.calories;
                         totals += this.props.mfp.mfpData[i].totals.calories;
                     }
-                    newContainers.push(
-                        {
-                            data:
-                                <div style={{ height: "100%" }}>
-                                    <MFPPieChartCals actual={totals} goal={goals} remaining={goals - totals} />
-                                </div>
-                            ,
-                            key: "mfpcals-chart",
-                            minWidth: 4,
-                            minHeight: 10
-                        })
-                    newContainers.push(
-                        {
-                            data:
-                                <div style={{ height: "100%" }}>
-                                    <MFPTable />
-                                </div>
-                            ,
-                            key: "mfpcals-table",
-                            minWidth: 6,
-                            minHeight: 8
-                        })
-                    this.setState({
-                        containers: newContainers,
-                        dashboardReady: true
-                    });
+                    this.addDataToContainer("mfpcals-chart",
+                        <div style={{ height: "100%" }}>
+                            <MFPPieChartCals actual={totals} goal={goals} remaining={goals - totals} />
+                        </div>
+                    )
+                    this.addDataToContainer("mfpcals-table",
+                        <div style={{ height: "100%" }}>
+                            <MFPTable />
+                        </div>
+                    )
                     localStorage.setItem('dashboard-layout', this.props.layout)
                     this.grid.reloadLayout();
                 })
@@ -156,6 +151,20 @@ class MembersArea extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.saveDetails());
+    }
+
+    addDataToContainer = (key, data) => {
+        const newContainers = this.state.containers;
+        newContainers.map(item => {
+            if (item.key === key) {
+                item.data = data;
+                item.ready = true;
+            }
+            return item;
+        })
+        this.setState({
+            containers: newContainers
+        });
     }
 
     saveDetails = () => {
@@ -268,7 +277,7 @@ class MembersArea extends Component {
                                             </span>)
                                             : (<div />)}
                                     </div>
-                                    <ContainerLoader ready={this.state.dashboardReady}>
+                                    <ContainerLoader ready={item.ready}>
                                         <div style={{ height: "100%", width: '100%' }}>
                                             {item.data}
                                         </div>
