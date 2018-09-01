@@ -35,7 +35,6 @@ export const getMFP = (callback) => async dispatch => {
                 'Authorization': `bearer ${localStorage.getItem('token')}`,
             }
         });
-        console.log(response);
         // Send to middlewares and reducers
         dispatch({ type: USER_DETAILS_MFP, payload: response.data });
         // console.log(response.data)

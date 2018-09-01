@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -47,46 +47,39 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-class MFPTable extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        const { classes } = this.props;
-        return (
-            <Table className={classes.table}>
-                <TableHead>
-                    <TableRow>
-                        <CustomTableCell>Dessert (100g serving)</CustomTableCell>
-                        <CustomTableCell numeric>Calories</CustomTableCell>
-                        <CustomTableCell numeric>Fat (g)</CustomTableCell>
-                        <CustomTableCell numeric>Carbs (g)</CustomTableCell>
-                        <CustomTableCell numeric>Protein (g)</CustomTableCell>
+const MFPTable = (props) => {
+    const { classes } = props;
+    const data = props.data !== undefined ? props.data : rows;
+    return (
+        <Table className={classes.table}>
+            <TableHead>
+                <TableRow>
+                    <CustomTableCell>Dessert (100g serving)</CustomTableCell>
+                    <CustomTableCell numeric>Calories</CustomTableCell>
+                    <CustomTableCell numeric>Fat (g)</CustomTableCell>
+                    <CustomTableCell numeric>Carbs (g)</CustomTableCell>
+                    <CustomTableCell numeric>Protein (g)</CustomTableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {data.map(row => (
+                    <TableRow className={classes.row} key={row.id}>
+                        <CustomTableCell component="th" scope="row">
+                            {row.name}
+                        </CustomTableCell>
+                        <CustomTableCell numeric>{row.calories}</CustomTableCell>
+                        <CustomTableCell numeric>{row.fat}</CustomTableCell>
+                        <CustomTableCell numeric>{row.carbs}</CustomTableCell>
+                        <CustomTableCell numeric>{row.protein}</CustomTableCell>
                     </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map(row => {
-                        return (
-                            <TableRow className={classes.row} key={row.id}>
-                                <CustomTableCell component="th" scope="row">
-                                    {row.name}
-                                </CustomTableCell>
-                                <CustomTableCell numeric>{row.calories}</CustomTableCell>
-                                <CustomTableCell numeric>{row.fat}</CustomTableCell>
-                                <CustomTableCell numeric>{row.carbs}</CustomTableCell>
-                                <CustomTableCell numeric>{row.protein}</CustomTableCell>
-                            </TableRow>
-                        );
-                    })}
-                </TableBody>
-            </Table>
-        )
-    }
+                ))}
+            </TableBody>
+        </Table>
+    )
 }
 
 MFPTable.propTypes = {
-  classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(MFPTable);

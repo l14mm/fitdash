@@ -76,6 +76,7 @@ class MembersArea extends Component {
 
         this.props.getUserDetails(() => {
             localStorage.setItem('dashboard-layout', this.props.layout)
+            this.grid.reloadLayout();
             this.setState({
                 containers: [
                     {
@@ -135,7 +136,7 @@ class MembersArea extends Component {
                     )
                     this.addDataToContainer("mfpcals-table",
                         <div style={{ height: "100%" }}>
-                            <MFPTable />
+                            <MFPTable data={[{ id: 0, name: "Frozen yoghurt", calories: 159, fat: 6.0, carbs: 24, protein: 4 }]} />
                         </div>
                     )
                     localStorage.setItem('dashboard-layout', this.props.layout)
@@ -154,17 +155,17 @@ class MembersArea extends Component {
     }
 
     addDataToContainer = (key, data) => {
-        const newContainers = this.state.containers;
-        newContainers.map(item => {
+        const { containers } = this.state;
+        containers.map(item => {
             if (item.key === key) {
-                item.data = data;
-                item.ready = true;
+                const newItem = item;
+                newItem.data = data;
+                newItem.ready = true;
+                return newItem;
             }
             return item;
         })
-        this.setState({
-            containers: newContainers
-        });
+        this.setState({ containers });
     }
 
     saveDetails = () => {
