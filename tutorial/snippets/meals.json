@@ -1,0 +1,263 @@
+[
+    {
+        "entry": [
+            {
+                "name": "Florette - Classic Salad (Bowl), 100 g",
+                "totals": {
+                    "fiber": 2,
+                    "carbohydrates": 4,
+                    "calories": 25,
+                    "fat": 0,
+                    "sugar": 3,
+                    "protein": 1
+                }
+            },
+            {
+                "name": "Kallo - Wholegrain Rice Cakes, 4 slice",
+                "totals": {
+                    "fiber": 1,
+                    "carbohydrates": 24,
+                    "calories": 116,
+                    "fat": 1,
+                    "sugar": 0,
+                    "protein": 2
+                }
+            }
+        ],
+        "name": "morning snacks"
+    },
+    {
+        "entry": [
+            {
+                "name": "Tilda - Fragrant Jasmine Rice, 130 g uncooked",
+                "totals": {
+                    "fiber": 1,
+                    "carbohydrates": 101,
+                    "calories": 454,
+                    "fat": 1,
+                    "sugar": 1,
+                    "protein": 10
+                }
+            },
+            {
+                "name": "Sainsbury's - Curly Kale, 9 g",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 4,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Sainsbury's - Frozen Chopped Spinach, 15 g",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 4,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Oaklands - mixed peppers x1, 11 gram",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 3,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Sainsbury's - 2 whole chicken breast fillets, 114.44 gram",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 1,
+                    "calories": 157,
+                    "fat": 2,
+                    "sugar": 0,
+                    "protein": 35
+                }
+            }
+        ],
+        "name": "meal 1"
+    },
+    {
+        "entry": [
+            {
+                "name": "Sainsbury's - 2 whole chicken breast fillets, 114.44 gram",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 1,
+                    "calories": 157,
+                    "fat": 2,
+                    "sugar": 0,
+                    "protein": 35
+                }
+            },
+            {
+                "name": "Oaklands - mixed peppers x1, 11 gram",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 3,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Sainsbury's - Frozen Chopped Spinach, 15 g",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 4,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Sainsbury's - Curly Kale, 9 g",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 4,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Tilda - Fragrant Jasmine Rice, 130 g uncooked",
+                "totals": {
+                    "fiber": 1,
+                    "carbohydrates": 101,
+                    "calories": 454,
+                    "fat": 1,
+                    "sugar": 1,
+                    "protein": 10
+                }
+            }
+        ],
+        "name": "meal 2"
+    },
+    {
+        "entry": [
+            {
+                "name": "Tilda - Fragrant Jasmine Rice, 130 g uncooked",
+                "totals": {
+                    "fiber": 1,
+                    "carbohydrates": 101,
+                    "calories": 454,
+                    "fat": 1,
+                    "sugar": 1,
+                    "protein": 10
+                }
+            },
+            {
+                "name": "Sainsbury's - Curly Kale, 9 g",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 4,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Sainsbury's - Frozen Chopped Spinach, 15 g",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 4,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Oaklands - mixed peppers x1, 11 gram",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 0,
+                    "calories": 3,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Sainsbury's - 2 whole chicken breast fillets, 114.44 gram",
+                "totals": {
+                    "fiber": 0,
+                    "carbohydrates": 1,
+                    "calories": 157,
+                    "fat": 2,
+                    "sugar": 0,
+                    "protein": 35
+                }
+            }
+        ],
+        "name": "meal 3"
+    },
+    {
+        "entry": [
+            {
+                "name": "Alpro - Roasted Almond Drink Unsweetened, 300 ml",
+                "totals": {
+                    "fiber": 1,
+                    "carbohydrates": 0,
+                    "calories": 39,
+                    "fat": 3,
+                    "sugar": 0,
+                    "protein": 1
+                }
+            },
+            {
+                "name": "Natural Health 4 Life - Psyllium Husk Powder, 20 g",
+                "totals": {
+                    "fiber": 16,
+                    "carbohydrates": 18,
+                    "calories": 7,
+                    "fat": 0,
+                    "sugar": 0,
+                    "protein": 0
+                }
+            },
+            {
+                "name": "Blanched - Almonds, 40 g",
+                "totals": {
+                    "fiber": 6,
+                    "carbohydrates": 1,
+                    "calories": 228,
+                    "fat": 22,
+                    "sugar": 1,
+                    "protein": 7
+                }
+            }
+        ],
+        "name": "essentials"
+    },
+    {
+        "entry": [
+            {
+                "name": "Kallo - Wholegrain Rice Cakes, 4 slice",
+                "totals": {
+                    "fiber": 1,
+                    "carbohydrates": 24,
+                    "calories": 116,
+                    "fat": 1,
+                    "sugar": 0,
+                    "protein": 2
+                }
+            }
+        ],
+        "name": "evening snacks"
+    }
+]

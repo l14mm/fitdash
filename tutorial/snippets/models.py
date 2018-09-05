@@ -4,6 +4,9 @@ from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 from datetime import datetime
 
+class MfpMeals(models.Model):
+    username = models.CharField(max_length=100)
+
 class Mfp(models.Model):
     username = models.CharField(max_length=100)
 

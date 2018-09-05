@@ -1,5 +1,5 @@
-from snippets.models import Mfp
-from snippets.serializers import MfpSerializer
+from snippets.models import Mfp, MfpMeals
+from snippets.serializers import MfpSerializer, MfpMealsSerializer
 from rest_framework import generics, authentication, exceptions, status
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
@@ -14,30 +14,47 @@ from datetime import timedelta, datetime
 import requests
 
 
-def getMfpData():
-    client = myfitnesspal.Client('premiumliam')
+class GetMeals(APIView):
+    def get(self, response, *args, **kwargs):
+        jwt = response.META.get('HTTP_AUTHORIZATION')
 
-    endDate = datetime.datetime.now().date()
-    startDate = endDate - timedelta(days=7)
+        url = 'http://localhost:3011/userDetails'
+        headers = {'Authorization': jwt}
+        r = requests.get(url, headers=headers)
 
-    days = []
+        username = r.json()['username']
+        userData = MfpMeals.objects.filter(username=username)
 
-    while startDate < endDate:
-        day = client.get_date(startDate)
-        days.append({
-            'date': day.date,
-            'totals': day.totals,
-            'goals': day.goals
-        })
-        startDate += timedelta(days=1)
+        client = myfitnesspal.Client('premiumliam')
 
-    return days
+        day = client.get_date(datetime.now().date())
+        entries = []
+        for meal in day.meals:
+            foods = []
+            for food in meal:
+                foods.append({
+                    'name': food.name,
+                    'totals': food.totals
+                })
+            entries.append({
+                'name': meal.name,
+                'entry': foods
+            })
+
+        print(entries)
+
+        serializer = MfpMealsSerializer(data=entries)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetWeek(APIView):
     def get(self, response, *args, **kwargs):
         jwt = response.META.get('HTTP_AUTHORIZATION')
-        
+
         url = 'http://localhost:3011/userDetails'
         headers = {'Authorization': jwt}
         r = requests.get(url, headers=headers)
@@ -46,7 +63,7 @@ class GetWeek(APIView):
         userData = Mfp.objects.filter(username=username)
         if userData:
             userData = userData[len(userData)-1]
-        
+
         if userData:
             serializer = MfpSerializer(userData)
             if datetime.now().date() > datetime.strptime(serializer.data["mfpData"][len(serializer.data["mfpData"]) - 1].items()[0][1], '%Y-%m-%d').date():
