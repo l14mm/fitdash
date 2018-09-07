@@ -1,37 +1,8 @@
 {
     "username": "3",
-    "days": [
+    "mfpData": [
         {
             "date": "2018-08-28",
-            "meals": [
-                {
-                    "entries": [
-                        {
-                            "name": "Florette - Classic Salad (Bowl), 100 g",
-                            "totals": {
-                                "fiber": 2,
-                                "carbohydrates": 4,
-                                "calories": 25,
-                                "fat": 0,
-                                "sugar": 3,
-                                "protein": 1
-                            }
-                        },
-                        {
-                            "name": "Kallo - Wholegrain Rice Cakes, 4 slice",
-                            "totals": {
-                                "fiber": 1,
-                                "carbohydrates": 24,
-                                "calories": 116,
-                                "fat": 1,
-                                "sugar": 0,
-                                "protein": 2
-                            }
-                        }
-                    ],
-                    "name": "morning snacks"
-                }
-            ],
             "goals": {
                 "fiber": 38,
                 "carbohydrates": 360,

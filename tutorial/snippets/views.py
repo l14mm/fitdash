@@ -27,28 +27,47 @@ class GetMeals(APIView):
 
         client = myfitnesspal.Client('premiumliam')
 
-        day = client.get_date(datetime.now().date())
-        entries = []
-        for meal in day.meals:
-            foods = []
-            for food in meal:
-                foods.append({
-                    'name': food.name,
-                    'totals': food.totals
+        endDate = datetime.now().date()
+        startDate = endDate - timedelta(days=2)
+
+        days = []
+
+        while startDate <= endDate:
+            day = client.get_date(startDate)
+
+            entries = []
+            for meal in day.meals:
+                foods = []
+                for food in meal:
+                    foods.append({
+                        'name': food.name,
+                        'totals': food.totals
+                    })
+                entries.append({
+                    'name': meal.name,
+                    'entry': foods
                 })
-            entries.append({
-                'name': meal.name,
-                'entry': foods
+
+            days.append({
+                'date': str(day.date),
+                'meals': entries,
+                'totals': day.totals,
+                'goals': day.goals
             })
+            startDate += timedelta(days=1)
 
-        print(entries)
+        data = {
+            "username": username,
+            "days": days
+        }
 
-        serializer = MfpMealsSerializer(data=entries)
+        print(data)
+        # serializer = MfpMealsSerializer(data=data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetWeek(APIView):

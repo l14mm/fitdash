@@ -38,19 +38,43 @@ class MfpSerializer(serializers.ModelSerializer):
 
 
 
+
+
+class EntriesSerializer(serializers.ModelSerializer):
+    totals = TotalsSerializer()
+    class Meta:
+        model = MfpData
+        fields = ('name', 'totals')
+
+class MealsSerializer(serializers.ModelSerializer):
+    entries = EntriesSerializer(many=True)
+    class Meta:
+        model = MfpData
+        fields = ('entries', 'name')
+
+class DaysSerializer(serializers.ModelSerializer):
+    meals = MealsSerializer(many=True)
+    goals = GoalsSerializer()
+    totals = TotalsSerializer()
+    class Meta:
+        model = MfpData
+        fields = ('date', 'meals', 'goals', 'totals')
+
 class MfpMealsSerializer(serializers.ModelSerializer):
     mfpData = MfpDataSerializer(many=True)
     class Meta:
         model = Mfp
-        fields = ('username', 'entries')
+        fields = ('username', 'days')
 
     def create(self, validated_data):
-        entries = validated_data.pop('entries')
+        days = validated_data.pop('days')
         mfp = MfpMeals.objects.create(**validated_data)
-        for entry in entries:
-            name = entry.pop('name')
-            totals = entry.pop('totals')
-            name = Name.objects.create(**name)
+        for day in days:
+            meals = day.pop('meals')
+            goals = day.pop('goals')
+            totals = day.pop('totals')
+            meals = Goals.objects.create(**meals)
+            goals = Goals.objects.create(**goals)
             totals = Totals.objects.create(**totals)
-            mfpData = MfpData.objects.create(album=mfp, goals=goals, totals=totals, **track_data)
+            mfpData = MfpData.objects.create(mfp=mfp, meals=meals, goals=goals, totals=totals, **day)
         return mfp
