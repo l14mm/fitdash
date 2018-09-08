@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from snippets.models import Mfp, MfpData, Goals, Totals
+from snippets.models import Mfp, MfpData, Goals, Totals, Meals, MfpMeals, Days, Entries
 
 class GoalsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,13 +43,13 @@ class MfpSerializer(serializers.ModelSerializer):
 class EntriesSerializer(serializers.ModelSerializer):
     totals = TotalsSerializer()
     class Meta:
-        model = MfpData
+        model = Entries
         fields = ('name', 'totals')
 
 class MealsSerializer(serializers.ModelSerializer):
     entries = EntriesSerializer(many=True)
     class Meta:
-        model = MfpData
+        model = Meals
         fields = ('entries', 'name')
 
 class DaysSerializer(serializers.ModelSerializer):
@@ -57,24 +57,27 @@ class DaysSerializer(serializers.ModelSerializer):
     goals = GoalsSerializer()
     totals = TotalsSerializer()
     class Meta:
-        model = MfpData
+        model = Days
         fields = ('date', 'meals', 'goals', 'totals')
 
 class MfpMealsSerializer(serializers.ModelSerializer):
-    mfpData = MfpDataSerializer(many=True)
+    days = DaysSerializer(many=True)
     class Meta:
-        model = Mfp
+        model = MfpMeals
         fields = ('username', 'days')
 
     def create(self, validated_data):
+        print("creating")
         days = validated_data.pop('days')
-        mfp = MfpMeals.objects.create(**validated_data)
+        mfpMeal = MfpMeals.objects.create(**validated_data)
         for day in days:
+            print(day)
             meals = day.pop('meals')
             goals = day.pop('goals')
             totals = day.pop('totals')
             meals = Goals.objects.create(**meals)
             goals = Goals.objects.create(**goals)
             totals = Totals.objects.create(**totals)
-            mfpData = MfpData.objects.create(mfp=mfp, meals=meals, goals=goals, totals=totals, **day)
-        return mfp
+            day = Days.objects.create(mfp=mfpMeal, meals=meals, goals=goals, totals=totals, **day)
+            # day = Days.objects.create(mfp=mfpMeal, goals=goals, totals=totals, **day)
+        return mfpMeal
