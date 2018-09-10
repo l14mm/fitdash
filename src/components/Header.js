@@ -38,8 +38,13 @@ class Header extends Component {
             return (
                 <span>
                     <Link to="/membersarea" className={classes.link}>
-                        <Button className={classes.title}>
+                    <Button className={classes.title}>
                             Members Area
+                    </Button>
+                    </Link>
+                    <Link to="/schedule" className={classes.link}>
+                    <Button className={classes.title}>
+                            Schedule
                     </Button>
                     </Link>
                     <Link to="/editprofile" className={classes.link}>

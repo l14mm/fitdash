@@ -61,7 +61,7 @@ const styles = theme => ({
     selectMenu: {
         display: 'none'
     }
-})
+});
 
 class MembersArea extends Component {
     constructor(props) {
@@ -71,7 +71,8 @@ class MembersArea extends Component {
             containerHovered: -1,
             deleteOpen: false,
             newContainerOpen: false,
-            containers: []
+            containers: [],
+            select: ''
         };
 
         this.props.getUserDetails(() => {
@@ -215,7 +216,6 @@ class MembersArea extends Component {
         this.setState({ containerHovered: index === false ? -1 : index });
     }
 
-
     render() {
         const { classes } = this.props;
         const { containers, containerHovered } = this.state;
@@ -238,6 +238,7 @@ class MembersArea extends Component {
                         onClose={this.handleCloseNewContainerSelect}
                         onOpen={this.handleOpenNewContainerSelect}
                         onChange={this.handleAddNewContainer}
+                        value={this.state.select}
                     >
                         <MenuItem value={1}>Empty container</MenuItem>
                         <MenuItem value={2}>Different container</MenuItem>

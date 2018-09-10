@@ -15,6 +15,7 @@ import Login from "./components/Login";
 import MembersArea from './components/MembersArea'
 import Logout from './components/Logout';
 import EditProfile from "./components/EditProfile";
+import Schedule from "./components/Schedule";
 
 const store = createStore(
   reducers,
@@ -32,6 +33,7 @@ ReactDOM.render(
         <Route path='/logout' component={Logout} />
         <Route path='/membersarea' component={MembersArea} />
         <Route path='/editprofile' component={EditProfile} />
+        <Route path='/schedule' component={Schedule} />
       </App>
     </Router>
   </Provider>
