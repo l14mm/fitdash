@@ -63,7 +63,7 @@ class ContainerGrid extends Component {
             containerHovered: -1,
             deleteOpen: false,
             newContainerOpen: false,
-            // containers: [],
+            containers: this.props.loadDetails(),
             select: ''
         }
     }
@@ -77,7 +77,7 @@ class ContainerGrid extends Component {
     }
 
     handleAddNewContainer = (e) => {
-        const { containers } = this.props;
+        const { containers } = this.state;
         containers.push({
             data:
                 <div />,
@@ -85,8 +85,7 @@ class ContainerGrid extends Component {
             minWidth: 4,
             minHeight: 4
         })
-        // this.setState({ containers })
-        this.props.containers = containers;
+        this.setState({ containers })
     }
 
     handleClickDelete = (key) => {
@@ -109,8 +108,8 @@ class ContainerGrid extends Component {
     }
 
     render() {
-        const { classes, containers, saveDetails, menuItems } = this.props;
-        const { containerHovered } = this.state;
+        const { classes, saveDetails, menuItems } = this.props;
+        const { containerHovered, containers } = this.state;
         return (
             <span>
                 <Select
@@ -152,7 +151,7 @@ class ContainerGrid extends Component {
                 </Button>
                     </DialogActions>
                 </Dialog>
-                <ResponsiveGridLayout saveDetails={saveDetails} ref={instance => { this.grid = instance; }}>
+                <ResponsiveGridLayout saveDetails={() => saveDetails(this.state.containers)} ref={instance => { this.grid = instance; }}>
                     {containers.map((item, index) => (
                         <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                             <Paper square className={classes.paper}>

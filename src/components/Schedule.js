@@ -46,34 +46,33 @@ class Schedule extends Component {
         super(props);
 
         this.state = {
-            containers: [
-                {
-                    data:
-                        <div>
-                            Welcome {this.props.username} to your new fitness dashboard!
-                            </div>,
-                    key: 'welcomeMessage',
-                    minWidth: 2,
-                    minHeight: 2,
-                    ready: true
-                },
-            ],
             menuItems: [
                 { text: "NewItem" }
             ],
         }
     }
 
-    saveDetails = () => {
-        console.log("request to save details")
-    }
+    loadDetails = () => JSON.parse(localStorage.getItem("schedule"));
+    // [
+    //     {
+    //         data:
+    //             <div>
+    //                 Welcome {this.props.username} to your new fitness dashboard!
+    //                     </div>,
+    //         key: 'welcomeMessage',
+    //         minWidth: 2,
+    //         minHeight: 2,
+    //         ready: true
+    //     },
+    // ];
+
+    saveDetails = (containers) => localStorage.setItem("schedule", JSON.stringify(containers));
 
     render() {
-        // const { classes } = this.props;
         const { containers, containerHovered, menuItems } = this.state;
         return (
             <ContainerGrid containers={containers} containerHovered={containerHovered}
-                saveDetails={this.saveDetails} menuItems={menuItems} />
+            loadDetails={this.loadDetails} saveDetails={this.saveDetails} menuItems={menuItems} />
         )
     }
 }
