@@ -18,6 +18,7 @@ import Select from '@material-ui/core/Select';
 
 import ResponsiveGridLayout from './ResponsiveGridLayout';
 import ContainerLoader from './ContainerLoader';
+import Message from './Message';
 
 const styles = theme => ({
     card: {
@@ -55,6 +56,10 @@ const styles = theme => ({
     }
 });
 
+const containerCodes = {
+    1: Message
+}
+
 class ContainerGrid extends Component {
     constructor(props) {
         super(props);
@@ -64,7 +69,8 @@ class ContainerGrid extends Component {
             deleteOpen: false,
             newContainerOpen: false,
             containers: this.props.loadDetails(),
-            select: ''
+            select: '',
+            menuItems: this.props.menuItems
         }
     }
 
@@ -79,11 +85,13 @@ class ContainerGrid extends Component {
     handleAddNewContainer = (e) => {
         const { containers } = this.state;
         containers.push({
-            data:
-                <div />,
+            data: React.createElement(containerCodes[this.state.menuItems[e.target.value].containerType], ...this.state.menuItems[e.target.value].props),
+            props: this.state.menuItems[e.target.value].props,
+            containerType: this.state.menuItems[e.target.value].containerType,
             key: `container-${containers.length}-${Math.random() * 100}`,
             minWidth: 4,
-            minHeight: 4
+            minHeight: 4,
+            ready: true
         })
         this.setState({ containers })
     }
@@ -130,7 +138,7 @@ class ContainerGrid extends Component {
                     onChange={this.handleAddNewContainer}
                     value={this.state.select}
                 >
-                    {menuItems.map((item, index) => <MenuItem value={index}>{item.text}</MenuItem>)}
+                    {menuItems.map((item, index) => <MenuItem key={item.key} value={index}>{item.text}</MenuItem>)}
                 </Select>
                 <Dialog
                     open={this.state.deleteOpen}
