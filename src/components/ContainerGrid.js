@@ -84,13 +84,14 @@ class ContainerGrid extends Component {
 
     handleAddNewContainer = (e) => {
         const { containers } = this.state;
+        const item = this.state.menuItems[e.target.value];
         containers.push({
-            data: React.createElement(containerCodes[this.state.menuItems[e.target.value].containerType], ...this.state.menuItems[e.target.value].props),
-            props: this.state.menuItems[e.target.value].props,
-            containerType: this.state.menuItems[e.target.value].containerType,
+            data: React.createElement(containerCodes[item.containerType], ...item.props),
+            props: item.props,
+            containerType: item.containerType,
             key: `container-${containers.length}-${Math.random() * 100}`,
-            minWidth: 4,
-            minHeight: 4,
+            minWidth: item.minWidth,
+            minHeight: item.minHeight,
             ready: true
         })
         this.setState({ containers })
@@ -119,7 +120,7 @@ class ContainerGrid extends Component {
         const { classes, saveDetails, menuItems } = this.props;
         const { containerHovered, containers } = this.state;
         return (
-            <span>
+            <span style={{ flex: 5 }}>
                 <Select
                     IconComponent={() => (
                         <IconButton

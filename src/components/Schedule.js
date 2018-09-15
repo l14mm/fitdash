@@ -18,6 +18,8 @@ const styles = theme => ({
     },
     root: {
         flexGrow: 1,
+        display: "flex",
+        flexDirection: "row"
     },
     paper: {
         textAlign: 'center',
@@ -28,17 +30,22 @@ const styles = theme => ({
         flexDirection: 'column',
         overflowY: 'auto'
     },
-    grid: {
-        // alignItems: 'stretch'
-    },
-    button: {
-        // margin: theme.spacing.unit,
-    },
     deleteContainer: {
 
     },
     selectMenu: {
         display: 'none'
+    },
+    times: {
+        display: "inline-block"
+    },
+    time: {
+        padding: "12px",
+        borderTop: "dashed"
+    },
+    container: {
+        display: "inline-block",
+        flex: 5
     }
 });
 
@@ -56,10 +63,10 @@ class Schedule extends Component {
                     text: "Container Type 1",
                     containerType: 1,
                     props: [
-                        { text: "hello3" }
+                        { text: "Random event" }
                     ],
-                    key: 'welcomeMessage',
-                    minWidth: 2,
+                    key: `welcomeMessage-${Math.random()}`,
+                    minWidth: 1,
                     minHeight: 2,
                     ready: true
                 },
@@ -89,9 +96,27 @@ class Schedule extends Component {
 
     render() {
         const { containers, containerHovered, menuItems } = this.state;
+        const { classes } = this.props;
+        const times = [];
+        for (let i = 0; i < 24; i += 1) {
+            let start = i;
+            let end = i + 1;
+            start = start < 10 ? `0${start}: 00` : `${start}: 00`;
+            end = end < 10 ? `0${end}: 00` : `${end}: 00`;
+            times.push(
+                <div className={classes.time}>
+                    {`${start} - ${end}`}
+                </div>
+            )
+        }
         return (
-            <ContainerGrid containers={containers} containerHovered={containerHovered}
-                loadDetails={this.loadDetails} saveDetails={this.saveDetails} menuItems={menuItems} />
+            <div className={classes.root}>
+                <div className={classes.times}>
+                    {times}
+                </div>
+                <ContainerGrid className={classes.container} containers={containers} containerHovered={containerHovered}
+                    loadDetails={this.loadDetails} saveDetails={this.saveDetails} menuItems={menuItems} />
+            </div>
         )
     }
 }
