@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  fitdash:
+    image: fitdash
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3011:3011
