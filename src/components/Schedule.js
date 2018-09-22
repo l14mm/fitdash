@@ -44,8 +44,8 @@ const styles = theme => ({
         borderTop: "dashed"
     },
     container: {
-        display: "inline-block",
-        flex: 5
+        display: "flex",
+        flexDirection: "row"
     }
 });
 
@@ -67,7 +67,7 @@ class Schedule extends Component {
                     ],
                     key: `welcomeMessage-${Math.random()}`,
                     minWidth: 1,
-                    minHeight: 2,
+                    minHeight: 1,
                     ready: true
                 },
             ],

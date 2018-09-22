@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  fitdash:
+    build: .
+    command: npm start
+    ports:
+      - 3100:3100

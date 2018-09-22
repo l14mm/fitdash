@@ -69,6 +69,8 @@ function saveToLS(key, value) {
             onLayoutChange={(layout, layouts) =>
               this.onLayoutChange(layout, layouts)
             }
+            rowHeight={34.85}
+            verticalCompact={false}
           >
             {this.props.children}
           </ResponsiveReactGridLayout>

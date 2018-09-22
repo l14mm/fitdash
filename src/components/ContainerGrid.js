@@ -138,6 +138,7 @@ class ContainerGrid extends Component {
                     onOpen={this.handleOpenNewContainerSelect}
                     onChange={this.handleAddNewContainer}
                     value={this.state.select}
+                    style={{ float: "left" }}
                 >
                     {menuItems.map((item, index) => <MenuItem key={item.key} value={index}>{item.text}</MenuItem>)}
                 </Select>
