@@ -26,8 +26,8 @@ class Totals(models.Model):
 class MfpData(models.Model):
     album = models.ForeignKey(Mfp, related_name='mfpData', on_delete=models.CASCADE)
     date = models.CharField(max_length=100)
-    goals = models.OneToOneField(Goals)
-    totals = models.OneToOneField(Totals)
+    goals = models.OneToOneField(Goals, None)
+    totals = models.OneToOneField(Totals, None)
 
     class Meta:
         ordering = ['date']
@@ -41,8 +41,8 @@ class Days(models.Model):
     album = models.ForeignKey(MfpMeals, related_name='mfpData', on_delete=models.CASCADE)
     date = models.CharField(max_length=100)
     # meals = models.OneToOneField(Meals)
-    goals = models.OneToOneField(Goals)
-    totals = models.OneToOneField(Totals)
+    goals = models.OneToOneField(Goals, None)
+    totals = models.OneToOneField(Totals, None)
 
     class Meta:
         ordering = ['date']
@@ -57,7 +57,7 @@ class Meals(models.Model):
 class Entries(models.Model):
     album = models.ForeignKey(Meals, related_name='entries', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    totals = models.OneToOneField(Totals)
+    totals = models.OneToOneField(Totals, None)
 
     class Meta:
         ordering = ['name']

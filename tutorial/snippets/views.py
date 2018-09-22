@@ -18,7 +18,8 @@ class GetMeals(APIView):
     def get(self, response, *args, **kwargs):
         jwt = response.META.get('HTTP_AUTHORIZATION')
 
-        url = 'http://localhost:3011/userDetails'
+        # url = 'http://localhost:3011/userDetails'
+        url = 'http://fitdash-api/userDetails'
         headers = {'Authorization': jwt}
         r = requests.get(url, headers=headers)
 

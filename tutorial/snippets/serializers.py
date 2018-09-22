@@ -60,6 +60,17 @@ class DaysSerializer(serializers.ModelSerializer):
         model = Days
         fields = ('date', 'meals', 'goals', 'totals')
 
+    def create(self, validated_data):
+        meals = validated_data.pop('meals')
+        days = Days.objects.create(**validated_data)
+        for meal in meals:
+            entries = day.pop('meals')
+            goals = day.pop('goals')
+            goals = Goals.objects.create(**goals)
+            totals = Totals.objects.create(**totals)
+            day = Days.objects.create(mfp=mfpMeal, goals=goals, totals=totals, **day)
+        return mfpMeal
+
 class MfpMealsSerializer(serializers.ModelSerializer):
     days = DaysSerializer(many=True)
     class Meta:
