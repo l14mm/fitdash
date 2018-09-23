@@ -14,7 +14,7 @@ var MongoStore = require('connect-mongo')(session);
 
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/');
+mongoose.connect('mongodb://mongodb/');
 var db = mongoose.connection;
 
 //handle mongo error
@@ -51,7 +51,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3100');
+  res.setHeader('Access-Control-Allow-Origin', 'http://fitdash-app');
+  res.setHeader('Access-Control-Allow-Origin', 'http://fitdash-django');
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
