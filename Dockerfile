@@ -1,8 +1,11 @@
-FROM node:8.9-alpine
-ENV NODE_ENV production
+FROM node:8.12-alpine
+
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
+RUN apk update && apk add yarn python g++ make && rm -rf /var/cache/apk/*
+RUN npm install
+
 COPY . .
 EXPOSE 3011
+
 CMD npm start
