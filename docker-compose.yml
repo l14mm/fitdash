@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  fitdash-django:
+    build: fitdash-django
+    # command: python tutorial/manage.py makemigrations && python tutorial/manage.py migrate && python tutorial/manage.py runserver 0.0.0.0:8000
+    command: python tutorial/manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+  fitdash-api:
+    build: fitdash-api
+    command: npm run devstart
+    # environment:
+      # NODE_ENV: production
+    ports:
+      - 3011:3011
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - ./fitdash-api/data/db:/data/db
+    ports:
+        - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null --quiet
+  fitdash-app:
+    build: fitdash-app
+    command: npm start
+    ports:
+      - 3100:3100
