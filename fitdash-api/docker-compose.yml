@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  fitdash:
+    image: fitdash
+    build: .
+    command: npm run devstart
+    ports:
+      - 3011:3011
+  mongodb:
+      image: mongo:latest
+      ports:
+          - 27017:27017
+      command: mongod --smallfiles --logpath=/dev/null --quiet

@@ -1,0 +1,13 @@
+version: '2.1'
+
+services:
+  fitdash:
+    image: fitdash
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3011:3011
+      - 9229:9229
+    ## set your startup file here
+    command: node --inspect index.js
