@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  fitdash:
+    build: .
+    # command: python tutorial/manage.py makemigrations && python tutorial/manage.py migrate && python tutorial/manage.py runserver 0.0.0.0:8000
+    command: python tutorial/manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000

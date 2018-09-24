@@ -1,0 +1,186 @@
+{
+    "username": "3",
+    "days": [
+        {
+            "date": "2018-08-28",
+            "meals": [
+                {
+                    "entries": [
+                        {
+                            "name": "Florette - Classic Salad (Bowl), 100 g",
+                            "totals": {
+                                "fiber": 2,
+                                "carbohydrates": 4,
+                                "calories": 25,
+                                "fat": 0,
+                                "sugar": 3,
+                                "protein": 1
+                            }
+                        },
+                        {
+                            "name": "Kallo - Wholegrain Rice Cakes, 4 slice",
+                            "totals": {
+                                "fiber": 1,
+                                "carbohydrates": 24,
+                                "calories": 116,
+                                "fat": 1,
+                                "sugar": 0,
+                                "protein": 2
+                            }
+                        }
+                    ],
+                    "name": "morning snacks"
+                }
+            ],
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 24,
+                "carbohydrates": 259,
+                "calories": 2412,
+                "fat": 43,
+                "sugar": 10,
+                "protein": 182
+            }
+        },
+        {
+            "date": "2018-08-29",
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 33,
+                "carbohydrates": 301,
+                "calories": 2403,
+                "fat": 47,
+                "sugar": 10,
+                "protein": 164
+            }
+        },
+        {
+            "date": "2018-08-30",
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 18,
+                "carbohydrates": 351,
+                "calories": 2407,
+                "fat": 43,
+                "sugar": 12,
+                "protein": 149
+            }
+        },
+        {
+            "date": "2018-08-31",
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 9,
+                "carbohydrates": 394,
+                "calories": 2407,
+                "fat": 25,
+                "sugar": 7,
+                "protein": 146
+            }
+        },
+        {
+            "date": "2018-09-01",
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 12,
+                "carbohydrates": 372,
+                "calories": 2387,
+                "fat": 31,
+                "sugar": 9,
+                "protein": 152
+            }
+        },
+        {
+            "date": "2018-09-02",
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 30,
+                "carbohydrates": 393,
+                "calories": 2417,
+                "fat": 33,
+                "sugar": 8,
+                "protein": 147
+            }
+        },
+        {
+            "date": "2018-09-03",
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 28,
+                "carbohydrates": 370,
+                "calories": 2403,
+                "fat": 30,
+                "sugar": 4,
+                "protein": 146
+            }
+        },
+        {
+            "date": "2018-09-04",
+            "goals": {
+                "fiber": 38,
+                "carbohydrates": 360,
+                "calories": 2400,
+                "fat": 40,
+                "sugar": 30,
+                "protein": 150
+            },
+            "totals": {
+                "fiber": 31,
+                "carbohydrates": 390,
+                "calories": 2409,
+                "fat": 30,
+                "sugar": 7,
+                "protein": 149
+            }
+        }
+    ]
+}
