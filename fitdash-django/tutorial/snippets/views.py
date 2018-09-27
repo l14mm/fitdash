@@ -18,15 +18,18 @@ class GetMeals(APIView):
     def get(self, response, *args, **kwargs):
         jwt = response.META.get('HTTP_AUTHORIZATION')
 
-        # url = 'http://localhost:3011/userDetails'
-        url = 'http://fitdash-api/userDetails'
+        url = 'http://fitdash-api:3011/userDetails'
         headers = {'Authorization': jwt}
         r = requests.get(url, headers=headers)
 
         username = r.json()['username']
         userData = MfpMeals.objects.filter(username=username)
 
-        client = myfitnesspal.Client('premiumliam')
+        mfp_password = ''
+        with open('../../config.env', 'r') as file:
+            mfp_password=file.read()
+
+        client = myfitnesspal.Client('premiumliam', password=mfp_password)
 
         endDate = datetime.now().date()
         startDate = endDate - timedelta(days=2)
@@ -75,7 +78,7 @@ class GetWeek(APIView):
     def get(self, response, *args, **kwargs):
         jwt = response.META.get('HTTP_AUTHORIZATION')
 
-        url = 'http://localhost:3011/userDetails'
+        url = 'http://fitdash-api:3011/userDetails'
         headers = {'Authorization': jwt}
         r = requests.get(url, headers=headers)
 
@@ -84,10 +87,14 @@ class GetWeek(APIView):
         if userData:
             userData = userData[len(userData)-1]
 
+        mfp_password = ''
+        with open('../../config.env', 'r') as file:
+            mfp_password=file.read()
+
         if userData:
             serializer = MfpSerializer(userData)
-            if datetime.now().date() > datetime.strptime(serializer.data["mfpData"][len(serializer.data["mfpData"]) - 1].items()[0][1], '%Y-%m-%d').date():
-                client = myfitnesspal.Client('premiumliam')
+            if datetime.now().date() > datetime.strptime(list(serializer.data["mfpData"][len(serializer.data["mfpData"]) - 1].items())[0][1], '%Y-%m-%d').date():
+                client = myfitnesspal.Client('premiumliam', password=mfp_password)
 
                 endDate = datetime.now().date()
                 startDate = endDate - timedelta(days=7)
@@ -117,7 +124,7 @@ class GetWeek(APIView):
             else:
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            client = myfitnesspal.Client('premiumliam')
+            client = myfitnesspal.Client('premiumliam', password=mfp_password)
 
             endDate = datetime.now().date()
             startDate = endDate - timedelta(days=7)

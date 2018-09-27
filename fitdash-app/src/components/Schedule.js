@@ -76,11 +76,11 @@ class Schedule extends Component {
 
     deserialiseContainers = (containers) => {
         try {
-            return JSON.parse(containers).map(item => {
+            return JSON.parse(containers) ? JSON.parse(containers).map(item => {
                 const newItem = item;
                 newItem.data = React.createElement(containerCodes[item.containerType], ...item.props);
                 return newItem;
-            })
+            }) : [];
         }
         catch (e) {
             console.log("error", e)
@@ -104,7 +104,7 @@ class Schedule extends Component {
             start = start < 10 ? `0${start}: 00` : `${start}: 00`;
             end = end < 10 ? `0${end}: 00` : `${end}: 00`;
             times.push(
-                <div className={classes.time}>
+                <div key={start} className={classes.time}>
                     {`${start} - ${end}`}
                 </div>
             )

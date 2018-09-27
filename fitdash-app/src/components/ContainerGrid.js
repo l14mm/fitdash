@@ -127,6 +127,7 @@ class ContainerGrid extends Component {
                             onClick={this.handleOpenNewContainerSelect}
                             color="primary"
                             className={classes.button}
+                            style={{ zIndex: 1 }}
                         >
                             <AddIcon />
                         </IconButton>
@@ -161,8 +162,8 @@ class ContainerGrid extends Component {
                 </Button>
                     </DialogActions>
                 </Dialog>
-                <ResponsiveGridLayout saveDetails={() => saveDetails(this.state.containers)} ref={instance => { this.grid = instance; }}>
-                    {containers.map((item, index) => (
+                <ResponsiveGridLayout saveDetails={() => saveDetails(this.state.containers)} ref={instance => { this.grid = instance; }} compactType={null}>
+                    {containers ? containers.map((item, index) => (
                         <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                             <Paper square className={classes.paper}>
                                 <div style={{ height: "20px", width: "100%", display: "table" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
@@ -184,7 +185,7 @@ class ContainerGrid extends Component {
                                 </ContainerLoader>
                             </Paper>
                         </div>
-                    ))}
+                    )) : null}
                 </ResponsiveGridLayout>
             </span>
         )

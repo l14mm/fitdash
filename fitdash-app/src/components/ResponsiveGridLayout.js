@@ -64,13 +64,12 @@ function saveToLS(key, value) {
           <ResponsiveReactGridLayout
             className="layout"
             cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-            rowHeight={30}
             layouts={this.state.layouts}
             onLayoutChange={(layout, layouts) =>
               this.onLayoutChange(layout, layouts)
             }
             rowHeight={34.85}
-            verticalCompact={false}
+            compactType={this.props.compactType}
           >
             {this.props.children}
           </ResponsiveReactGridLayout>

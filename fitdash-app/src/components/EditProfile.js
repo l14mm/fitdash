@@ -62,7 +62,6 @@ const renderTextField = ({
     label,
     value,
     className,
-    meta: { touched, error },
     ...custom
 }) => (
         <TextField
@@ -70,7 +69,6 @@ const renderTextField = ({
             floatingLabelText={label}
             label={label}
             className={className}
-            errorText={touched && error}
             {...input}
             {...custom}
         />
