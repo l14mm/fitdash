@@ -92,7 +92,8 @@ class ContainerGrid extends Component {
             key: `container-${containers.length}-${Math.random() * 100}`,
             minWidth: item.minWidth,
             minHeight: item.minHeight,
-            ready: true
+            ready: true,
+            y: 50
         })
         this.setState({ containers })
     }
@@ -164,7 +165,7 @@ class ContainerGrid extends Component {
                 </Dialog>
                 <ResponsiveGridLayout saveDetails={() => saveDetails(this.state.containers)} ref={instance => { this.grid = instance; }} compactType={null}>
                     {containers ? containers.map((item, index) => (
-                        <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
+                        <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: item.y, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                             <Paper square className={classes.paper}>
                                 <div style={{ height: "20px", width: "100%", display: "table" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
                                     {containerHovered === index ?

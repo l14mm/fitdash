@@ -63,36 +63,58 @@ class Schedule extends Component {
                     text: "Container Type 1",
                     containerType: 1,
                     props: [
-                        { text: "Random event" }
+                        { text: "Random event", addContainerProp: this.addContainerProp },
                     ],
                     key: `welcomeMessage-${Math.random()}`,
                     minWidth: 1,
-                    minHeight: 1,
+                    minHeight: 2,
                     ready: true
                 },
             ],
+            containerProps: []
         }
+        this.addContainerProp = this.addContainerProp.bind(this)
     }
 
     deserialiseContainers = (containers) => {
         try {
-            return JSON.parse(containers) ? JSON.parse(containers).map(item => {
+            console.log("containers:", containers)
+            if (containers === undefined) { return []; }
+            console.log('saved', JSON.parse(containers))
+            return JSON.parse(containers).map(item => {
                 const newItem = item;
                 newItem.data = React.createElement(containerCodes[item.containerType], ...item.props);
                 return newItem;
-            }) : [];
+            });
         }
         catch (e) {
             console.log("error", e)
+            console.log("containers", containers)
             return [];
         }
     }
 
-    serialiseContainers = (containers) => JSON.stringify(containers);
+    // serialiseContainers = (containers) => JSON.stringify(containers);
+    serialiseContainers = (containers) =>
+        JSON.stringify(containers.map(item => {
+            var newItem = item;
+            console.log(item)
+            newItem.newprops = 2;
+            return newItem;
+        }));
+
 
     loadDetails = () => this.deserialiseContainers(localStorage.getItem("schedule"));
 
     saveDetails = (containers) => localStorage.setItem("schedule", this.serialiseContainers(containers))
+
+    addContainerProp(key, value) {
+        console.log(key, value)
+        console.log('state', this.state)
+        var newContainerProps = this.state.containerProps;
+        newContainerProps.addContainerProp({key, value})
+        this.setState({containerProps: newContainerProps})
+    }
 
     render() {
         const { containers, containerHovered, menuItems } = this.state;

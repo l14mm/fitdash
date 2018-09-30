@@ -65,8 +65,6 @@ const renderTextField = ({
     ...custom
 }) => (
         <TextField
-            hintText={label}
-            floatingLabelText={label}
             label={label}
             className={className}
             {...input}

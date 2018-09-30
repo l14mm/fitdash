@@ -94,60 +94,37 @@ class GetWeek(APIView):
         if userData:
             serializer = MfpSerializer(userData)
             if datetime.now().date() > datetime.strptime(list(serializer.data["mfpData"][len(serializer.data["mfpData"]) - 1].items())[0][1], '%Y-%m-%d').date():
-                client = myfitnesspal.Client('premiumliam', password=mfp_password)
-
-                endDate = datetime.now().date()
-                startDate = endDate - timedelta(days=7)
-
-                days = []
-
-                while startDate <= endDate:
-                    day = client.get_date(startDate)
-                    days.append({
-                        'date': str(day.date),
-                        'totals': day.totals,
-                        'goals': day.goals
-                    })
-                    startDate += timedelta(days=1)
-
-                data = {
-                    "username": username,
-                    "mfpData": days
-                }
-
-                serializer = MfpSerializer(data=data)
-
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return return_week(mfp_password, username)
             else:
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            client = myfitnesspal.Client('premiumliam', password=mfp_password)
+            return return_week(mfp_password, username)
 
-            endDate = datetime.now().date()
-            startDate = endDate - timedelta(days=7)
+def return_week(mfp_password, username):
+    client = myfitnesspal.Client('premiumliam', password=mfp_password)
 
-            days = []
+    endDate = datetime.now().date()
+    startDate = endDate - timedelta(days=7)
 
-            while startDate <= endDate:
-                day = client.get_date(startDate)
-                days.append({
-                    'date': str(day.date),
-                    'totals': day.totals,
-                    'goals': day.goals
-                })
-                startDate += timedelta(days=1)
+    days = []
 
-            data = {
-                "username": username,
-                "mfpData": days
-            }
+    while startDate <= endDate:
+        day = client.get_date(startDate)
+        days.append({
+            'date': str(day.date),
+            'totals': day.totals,
+            'goals': day.goals
+        })
+        startDate += timedelta(days=1)
 
-            serializer = MfpSerializer(data=data)
+    data = {
+        "username": username,
+        "mfpData": days
+    }
 
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = MfpSerializer(data=data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
