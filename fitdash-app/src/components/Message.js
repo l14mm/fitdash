@@ -5,13 +5,18 @@ import { TextField } from "@material-ui/core";
 export default class Message extends Component {
     constructor(props) {
         super(props)
+
+        this.state = { text: props.text }
     }
 
-    onChange = (e) => { this.props.addContainerProp("text", e) }
+    onChange = (e) => {
+        // this.props.addContainerProp("text", e)
+        this.setState({ text: e.target.value })
+    }
 
     render() {
         return (
-            <TextField onChange={this.onChange} value={this.props.text} />
+            <TextField disabled onChange={this.onChange} value={this.state.text} />
         )
     }
 }

@@ -68,7 +68,8 @@ class Schedule extends Component {
                     key: `welcomeMessage-${Math.random()}`,
                     minWidth: 1,
                     minHeight: 2,
-                    ready: true
+                    ready: false,
+                    y: 2
                 },
             ],
             containerProps: []

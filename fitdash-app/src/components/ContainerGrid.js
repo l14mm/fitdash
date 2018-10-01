@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SettingsIcon from '@material-ui/icons/Settings';
+import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
@@ -85,6 +86,7 @@ class ContainerGrid extends Component {
     handleAddNewContainer = (e) => {
         const { containers } = this.state;
         const item = this.state.menuItems[e.target.value];
+        item.props.edit = console.log("i'm being edited")
         containers.push({
             data: React.createElement(containerCodes[item.containerType], ...item.props),
             props: item.props,
@@ -93,13 +95,17 @@ class ContainerGrid extends Component {
             minWidth: item.minWidth,
             minHeight: item.minHeight,
             ready: true,
-            y: 50
+            y: item.y || 10
         })
         this.setState({ containers })
     }
 
     handleClickDelete = (key) => {
         this.setState({ deleteOpen: true, containerToDelete: key })
+    }
+
+    handleClickEdit = (key) => {
+        this.setState({ containerToEdit: key })
     }
 
     handleClickConfirmDelete = () => {
@@ -175,6 +181,9 @@ class ContainerGrid extends Component {
                                             </IconButton>
                                             <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
                                                 <SettingsIcon style={{ fontSize: 20 }} />
+                                            </IconButton>
+                                            <IconButton onClick={() => this.handleClickEdit(item.key)} color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
+                                                <EditIcon style={{ fontSize: 20 }} />
                                             </IconButton>
                                         </span>)
                                         : (<div />)}
