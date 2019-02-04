@@ -23,7 +23,5 @@ services:
   fitdash-app:
     build: fitdash-app
     command: npm start
-    volumes:
-      - ./fitdash-app:/usr/src/app
     ports:
       - 3100:3100
