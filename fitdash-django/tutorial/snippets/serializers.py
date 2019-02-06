@@ -68,8 +68,8 @@ class DaysSerializer(serializers.ModelSerializer):
             goals = day.pop('goals')
             goals = Goals.objects.create(**goals)
             totals = Totals.objects.create(**totals)
-            day = Days.objects.create(mfp=mfpMeal, goals=goals, totals=totals, **day)
-        return mfpMeal
+            day = Days.objects.create(mfp=days, goals=goals, totals=totals, **day)
+        return days
 
 class MfpMealsSerializer(serializers.ModelSerializer):
     days = DaysSerializer(many=True)

@@ -13,7 +13,6 @@ import datetime
 from datetime import timedelta, datetime
 import requests
 
-
 class GetMeals(APIView):
     def get(self, response, *args, **kwargs):
         jwt = response.META.get('HTTP_AUTHORIZATION')
@@ -23,7 +22,7 @@ class GetMeals(APIView):
         r = requests.get(url, headers=headers)
 
         username = r.json()['username']
-        userData = MfpMeals.objects.filter(username=username)
+        # userData = MfpMeals.objects.filter(username=username)
 
         mfp_password = ''
         with open('../../config.env', 'r') as file:
@@ -81,7 +80,7 @@ class GetWeek(APIView):
         url = 'http://fitdash-api:3011/userDetails'
         headers = {'Authorization': jwt}
         r = requests.get(url, headers=headers)
-
+        
         username = r.json()['username']
         userData = Mfp.objects.filter(username=username)
         if userData:
