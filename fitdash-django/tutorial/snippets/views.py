@@ -64,7 +64,6 @@ class GetMeals(APIView):
             "days": days
         }
 
-        # print(data)
         serializer = MfpMealsSerializer(data=data)
 
         if serializer.is_valid():

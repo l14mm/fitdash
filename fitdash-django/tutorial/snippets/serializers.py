@@ -47,10 +47,10 @@ class EntriesSerializer(serializers.ModelSerializer):
         fields = ('name', 'totals')
 
 class MealsSerializer(serializers.ModelSerializer):
-    entries = EntriesSerializer(many=True)
+    entry = EntriesSerializer(many=True)
     class Meta:
         model = Meals
-        fields = ('entries', 'name')
+        fields = ('entry', 'name')
 
 class DaysSerializer(serializers.ModelSerializer):
     meals = MealsSerializer(many=True)
@@ -86,7 +86,7 @@ class MfpMealsSerializer(serializers.ModelSerializer):
             meals = day.pop('meals')
             goals = day.pop('goals')
             totals = day.pop('totals')
-            meals = Goals.objects.create(**meals)
+            meals = Meals.objects.create(**meals)
             goals = Goals.objects.create(**goals)
             totals = Totals.objects.create(**totals)
             day = Days.objects.create(mfp=mfpMeal, meals=meals, goals=goals, totals=totals, **day)
