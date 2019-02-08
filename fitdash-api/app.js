@@ -13,22 +13,32 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
 var bodyParser = require('body-parser');
+
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://mongodb/',
+mongoose.connect('mongodb://mongodb:27017/users',
   {
-    server: {
-      auto_reconnect: true,
-      reconnectTries: Number.MAX_VALUE,
-      reconnectInterval: 1000,
-      socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 }
-    }
+    auto_reconnect: true,
+    reconnectTries: Number.MAX_VALUE,
+    reconnectInterval: 1000,
+    keepAlive: 1,
+    connectTimeoutMS: 30000,
+    useNewUrlParser: true
   });
+
 var db = mongoose.connection;
 
-//handle mongo error
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', error => {
+  console.error.bind(console, 'Connection Error:');
+  mongoose.disconnect();
+});
+
+db.on('disconnected', function () {
+  console.log('MongoDB disconnected');
+  setTimeout(() => mongoose.connect('mongodb://mongodb:27017/users', { auto_reconnect: true }), 1000);
+});
+
 db.once('open', function () {
-  console.log("connected to mongodb!");
+  console.log("Connected to MongoDB");
 
   //use sessions for tracking logins
   app.use(session({

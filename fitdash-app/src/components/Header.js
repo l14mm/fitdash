@@ -83,7 +83,7 @@ class Header extends Component {
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Link to="/" className={classes.link}>
-                        <Typography className={classes.title} variant="title" color="secondary">
+                        <Typography className={classes.title} variant="h6" color="secondary">
                             FitDash
                         </Typography>
                     </Link>
