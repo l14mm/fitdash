@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AUTH_USER, AUTH_ERROR, USER_DETAILS, USER_DETAILS_MFP } from './types'
+import { AUTH_USER, AUTH_ERROR, USER_DETAILS, USER_DETAILS_MFP, USER_DETAILS_MFP_MEALS } from './types'
 
 // dispatch: funnels through action -> middleware -> reducer
 // do whatever we want inside action creator
@@ -36,6 +36,21 @@ export const getMFP = (callback) => async dispatch => {
         });
         dispatch({ type: USER_DETAILS_MFP, payload: response.data });
         callback(response.data);
+    } catch (e) {
+        dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user detauls" })
+    }
+};
+
+export const getMFPMeals = (callback) => async dispatch => {
+    try {
+        const response = await axios.get('http://localhost:8000/getmeals', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${localStorage.getItem('token')}`,
+            }
+        });
+        dispatch({ type: USER_DETAILS_MFP_MEALS, payload: response.data.days });
+        callback(response.data.days);
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user detauls" })
     }

@@ -66,7 +66,7 @@ const styles = theme => ({
 class MembersArea extends Component {
     constructor(props) {
         super(props);
-
+        
         this.state = {
             containerHovered: -1,
             deleteOpen: false,
@@ -78,6 +78,7 @@ class MembersArea extends Component {
         this.props.getUserDetails(() => {
             localStorage.setItem('dashboard-layout', this.props.layout)
             this.grid.reloadLayout();
+            
             this.setState({
                 containers: [
                     {
@@ -135,9 +136,22 @@ class MembersArea extends Component {
                             <MFPPieChartCals actual={totals} goal={goals} remaining={goals - totals} />
                         </div>
                     )
+                    localStorage.setItem('dashboard-layout', this.props.layout)
+                    this.grid.reloadLayout();
+                })
+                this.props.getMFPMeals(() => {
                     this.addDataToContainer("mfpcals-table",
                         <div style={{ height: "100%" }}>
-                            <MFPTable data={[{ id: 0, name: "Frozen yoghurt", calories: 159, fat: 6.0, carbs: 24, protein: 4 }]} />
+                        {
+                            this.props.mfpMeals[0].meals.map(meal => {
+                                var data = [];
+                                meal.entry.map((entry, i) => {
+                                    data.push({ id: i, name: entry.name, calories: entry.totals.calories, fat: entry.totals.fat, carbs: entry.totals.carbohydrates, protein: entry.totals.protein })
+                                })
+                                return (<MFPTable name={meal.name} data={data} /> )
+                            })
+                        }
+                            
                         </div>
                     )
                     localStorage.setItem('dashboard-layout', this.props.layout)
@@ -298,6 +312,7 @@ function mapStateToProps(state) {
     return {
         username: state.auth.username,
         mfp: state.auth.mfp,
+        mfpMeals: state.auth.mfpMeals,
         layout: state.auth.layout
     }
 }

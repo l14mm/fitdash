@@ -54,7 +54,7 @@ const MFPTable = (props) => {
         <Table className={classes.table}>
             <TableHead>
                 <TableRow>
-                    <CustomTableCell>Dessert (100g serving)</CustomTableCell>
+                    <CustomTableCell>{props.name}</CustomTableCell>
                     <CustomTableCell numeric>Calories</CustomTableCell>
                     <CustomTableCell numeric>Fat (g)</CustomTableCell>
                     <CustomTableCell numeric>Carbs (g)</CustomTableCell>
