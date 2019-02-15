@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AUTH_USER, AUTH_ERROR, USER_DETAILS, USER_DETAILS_MFP, USER_DETAILS_MFP_MEALS } from './types'
+import { AUTH_USER, AUTH_ERROR, USER_DETAILS, MFP_WEEK, MFP_MEALS } from './types'
 
 // dispatch: funnels through action -> middleware -> reducer
 // do whatever we want inside action creator
@@ -34,10 +34,10 @@ export const getMFP = (callback) => async dispatch => {
                 'Authorization': `bearer ${localStorage.getItem('token')}`,
             }
         });
-        dispatch({ type: USER_DETAILS_MFP, payload: response.data });
+        dispatch({ type: MFP_WEEK, payload: response.data });
         callback(response.data);
     } catch (e) {
-        dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user detauls" })
+        dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user details" })
     }
 };
 
@@ -49,10 +49,10 @@ export const getMFPMeals = (callback) => async dispatch => {
                 'Authorization': `bearer ${localStorage.getItem('token')}`,
             }
         });
-        dispatch({ type: USER_DETAILS_MFP_MEALS, payload: response.data.days });
+        dispatch({ type: MFP_MEALS, payload: response.data.days });
         callback(response.data.days);
     } catch (e) {
-        dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user detauls" })
+        dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user details" })
     }
 };
 
