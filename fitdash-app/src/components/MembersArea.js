@@ -17,6 +17,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
 
@@ -26,6 +30,8 @@ import MFPPieChartCals from './MFPPieChartCals';
 import MFPCalsLine from './MFPCalsLine';
 import ContainerLoader from './ContainerLoader';
 import MFPTable from './MFPTable';
+
+import ColorPicker from 'material-ui-color-picker'
 
 const styles = theme => ({
     card: {
@@ -60,25 +66,30 @@ const styles = theme => ({
     },
     selectMenu: {
         display: 'none'
+    },
+    paperOverflow: {
+        overflow:'visible'
     }
 });
 
 class MembersArea extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             containerHovered: -1,
             deleteOpen: false,
+            configureOpen: false,
             newContainerOpen: false,
             containers: [],
-            select: ''
+            select: '',
+            configView: null
         };
 
         this.props.getUserDetails(() => {
             localStorage.setItem('dashboard-layout', this.props.layout)
             this.grid.reloadLayout();
-            
+
             this.setState({
                 containers: [
                     {
@@ -89,7 +100,14 @@ class MembersArea extends Component {
                         key: 'welcomeMessage',
                         minWidth: 2,
                         minHeight: 2,
-                        ready: true
+                        ready: true,
+                        configView: (
+                            <ColorPicker
+                                name='color'
+                                defaultValue='#000'
+                                onChange={color => console.log(color)}
+                            />
+                        )
                     },
                     {
                         data: null,
@@ -107,15 +125,37 @@ class MembersArea extends Component {
                         data: null,
                         key: "mfpcals-table",
                         minWidth: 6,
-                        minHeight: 8
+                        minHeight: 8,
+                        config: {
+                            startDate: new Date('2014-08-18T21:11:54'),
+                            endDate: new Date('2014-08-19T21:11:54')
+                        },
+                        configView: (
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <Grid container style={{ width: '60%' }} justify="space-around">
+                                    <DatePicker
+                                        margin="normal"
+                                        label="Start date"
+                                        value={this.startDate}
+                                        onChange={this.handleDateChange}
+                                    />
+                                    <DatePicker
+                                        margin="normal"
+                                        label="End date"
+                                        value={this.endDate}
+                                        onChange={this.handleDateChange}
+                                    />
+                                </Grid>
+                            </MuiPickersUtilsProvider>
+                        )
                     }
                 ]
             }, () => {
                 this.props.getMFP(() => {
-                    this.props.mfp.mfpData.reverse();
+                    this.props.mfpWeek.mfpData.reverse();
                     this.addDataToContainer("mfpcals",
                         <div style={{ display: "flex", flexWrap: "wrap" }}>
-                            {this.props.mfp.mfpData.map((day, index) => (
+                            {this.props.mfpWeek.mfpData.map((day, index) => (
                                 <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", flexGrow: 1 }}>
                                     <MFPCalsLine
                                         date={index === 0 ? "Today" : new Date(day.date).toDateString()}
@@ -127,9 +167,9 @@ class MembersArea extends Component {
                     )
                     let goals = 0;
                     let totals = 0;
-                    for (let i = 0; i < this.props.mfp.mfpData.length; i += 1) {
-                        goals += this.props.mfp.mfpData[i].goals.calories;
-                        totals += this.props.mfp.mfpData[i].totals.calories;
+                    for (let i = 0; i < this.props.mfpWeek.mfpData.length; i += 1) {
+                        goals += this.props.mfpWeek.mfpData[i].goals.calories;
+                        totals += this.props.mfpWeek.mfpData[i].totals.calories;
                     }
                     this.addDataToContainer("mfpcals-chart",
                         <div style={{ height: "100%" }}>
@@ -142,16 +182,15 @@ class MembersArea extends Component {
                 this.props.getMFPMeals(() => {
                     this.addDataToContainer("mfpcals-table",
                         <div style={{ height: "100%" }}>
-                        {
-                            this.props.mfpMeals[0].meals.map(meal => {
-                                var data = [];
-                                meal.entry.map((entry, i) => {
-                                    data.push({ id: i, name: entry.name, calories: entry.totals.calories, fat: entry.totals.fat, carbs: entry.totals.carbohydrates, protein: entry.totals.protein })
+                            {
+                                this.props.mfpMeals[0].meals.map(meal => {
+                                    const data = [];
+                                    meal.entry.forEach((entry, j) => {
+                                        data.push({ id: j, name: entry.name, calories: entry.totals.calories, fat: entry.totals.fat, carbs: entry.totals.carbohydrates, protein: entry.totals.protein })
+                                    })
+                                    return (<MFPTable name={meal.name} data={data} key={meal.name} />)
                                 })
-                                return (<MFPTable name={meal.name} data={data} /> )
-                            })
-                        }
-                            
+                            }
                         </div>
                     )
                     localStorage.setItem('dashboard-layout', this.props.layout)
@@ -211,6 +250,21 @@ class MembersArea extends Component {
         this.setState({ containers })
     }
 
+    getContainer = key => this.state.containers.find(container => container.key === key)
+
+    handleClickConfigure = key => {
+        this.setState({ configureOpen: true, containerToConfigure: key, configView: this.getContainer(key).configView })
+        // return(this.getContainer(key).configView)
+    }
+
+    handleClickConfigureSave = () => {
+        this.setState({ configureOpen: false, containerToConfigure: null });
+    }
+
+    handleClickCancelConfigure = () => {
+        this.setState({ configureOpen: false, containerToConfigure: null });
+    }
+
     handleClickDelete = (key) => {
         this.setState({ deleteOpen: true, containerToDelete: key })
     }
@@ -229,6 +283,11 @@ class MembersArea extends Component {
     hoverButton = (index) => {
         this.setState({ containerHovered: index === false ? -1 : index });
     }
+
+    handleDateChange = date => {
+        console.log(date)
+        this.setState({ selectedDate: date });
+    };
 
     render() {
         const { classes } = this.props;
@@ -277,6 +336,29 @@ class MembersArea extends Component {
                             </Button>
                         </DialogActions>
                     </Dialog>
+                    <Dialog
+                        open={this.state.configureOpen}
+                        onClose={this.handleClose}
+                        classes={{paper:classes.paperOverflow}}
+                    >
+                        <DialogTitle id="alert-dialog-title">Configure container</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+
+                            </DialogContentText>
+
+                            {this.state.configView}
+
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClickCancelConfigure} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={this.handleClickConfigureSave} color="primary" autoFocus>
+                                Save
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                     <ResponsiveGridLayout saveDetails={this.props.saveDetails} ref={instance => { this.grid = instance; }}>
                         {containers.map((item, index) => (
                             <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
@@ -287,7 +369,7 @@ class MembersArea extends Component {
                                                 <IconButton onClick={() => this.handleClickDelete(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
                                                     <DeleteIcon style={{ fontSize: 20 }} />
                                                 </IconButton>
-                                                <IconButton color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
+                                                <IconButton onClick={() => this.handleClickConfigure(item.key)} color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
                                                     <SettingsIcon style={{ fontSize: 20 }} />
                                                 </IconButton>
                                             </span>)
@@ -311,8 +393,8 @@ class MembersArea extends Component {
 function mapStateToProps(state) {
     return {
         username: state.auth.username,
-        mfp: state.auth.mfp,
-        mfpMeals: state.auth.mfpMeals,
+        mfpWeek: state.mfp.mfpWeek,
+        mfpMeals: state.mfp.mfpMeals,
         layout: state.auth.layout
     }
 }
