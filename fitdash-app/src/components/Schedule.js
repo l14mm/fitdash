@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles'
 import requireAuth from './requireAuth';
 import ContainerGrid from './ContainerGrid';
-import Message from './Message';
+import Message from './Containers/Message';
 
 const styles = theme => ({
     card: {

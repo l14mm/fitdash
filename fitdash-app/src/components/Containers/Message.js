@@ -10,13 +10,12 @@ export default class Message extends Component {
     }
 
     onChange = (e) => {
-        // this.props.addContainerProp("text", e)
         this.setState({ text: e.target.value })
     }
 
     render() {
         return (
-            <TextField disabled onChange={this.onChange} value={this.state.text} />
+            <TextField disabled={this.props.edit} onChange={this.onChange} value={this.state.text} />
         )
     }
 }

@@ -1,8 +1,8 @@
 import { MFP_WEEK, MFP_MEALS } from '../actions/types';
 
 const INITIAL_STATE = {
-    mfpWeek: '',
-    mfpMeals: ''
+    mfpWeek: null,
+    mfpMeals: null
 };
 
 export default function (state = INITIAL_STATE, action) {
