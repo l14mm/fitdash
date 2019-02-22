@@ -1,39 +1,30 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import ColorPicker from 'material-ui-color-picker'
 import ConfigureContainer from './ConfigureContainer'
 
-class SimpleText extends Component {
-    constructor(props) {
-        super(props);
+const SimpleText = props => {
 
-        this.state = {
-            color: '#000000'
-        }
-    }
+    const [colour, setColour] = useState('#000000');
 
-    configureClicked = () => this.props.showConfigureDialog(this.configView());
+    const configView = () => (
+        <ColorPicker
+            name='color'
+            defaultValue='#000000'
+            onChange={c => c && setColour(c)}
+        />
+    )
 
-    configView() {
-        return (
-            <ColorPicker
-                name='color'
-                defaultValue='#000000'
-                onChange={color => color && this.setState({color})}
-            />
-        )
-    }
+    const configureClicked = () => props.showConfigureDialog(configView());
 
-    render() {
-        return (
-            <>
-                <ConfigureContainer {...this.props} configureClicked={this.configureClicked} configView={this.configView} />
-                <div style={{background:this.state.color}}>
-                    {this.props.text}
-                </div>
-            </>
-        )
-    }
+    return (
+        <>
+            <ConfigureContainer {...props} configureClicked={configureClicked} configView={configView} />
+            <div style={{ background: colour }}>
+                {props.text}
+            </div>
+        </>
+    )
 }
 
 export default SimpleText;
