@@ -22,7 +22,7 @@ class GetMeals(APIView):
         r = requests.get(url, headers=headers)
 
         username = r.json()['username']
-        mfpUsername = r.json()['username']
+        mfpUsername = r.json()['mfpUsername']
         # userData = MfpMeals.objects.filter(username=username)
 
         mfp_password = ''
