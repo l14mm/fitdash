@@ -8,11 +8,14 @@ const SimpleText = props => {
     const [colour, setColour] = useState('#000000');
 
     const configView = () => (
-        <ColorPicker
-            name='color'
-            defaultValue='#000000'
-            onChange={c => c && setColour(c)}
-        />
+        <>
+            <p>Text colour:</p>
+            <ColorPicker
+                name='color'
+                defaultValue='#000000'
+                onChange={c => c && setColour(c)}
+            />
+        </>
     )
 
     const configureClicked = () => props.showConfigureDialog(configView());
@@ -20,7 +23,7 @@ const SimpleText = props => {
     return (
         <>
             <ConfigureContainer {...props} configureClicked={configureClicked} configView={configView} />
-            <div style={{ background: colour }}>
+            <div style={{ color: colour }}>
                 {props.text}
             </div>
         </>

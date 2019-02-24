@@ -22,13 +22,14 @@ class GetMeals(APIView):
         r = requests.get(url, headers=headers)
 
         username = r.json()['username']
+        mfpUsername = r.json()['username']
         # userData = MfpMeals.objects.filter(username=username)
 
         mfp_password = ''
         with open('../../config.env', 'r') as file:
             mfp_password=file.read()
 
-        client = myfitnesspal.Client('premiumliam', password=mfp_password)
+        client = myfitnesspal.Client(mfpUsername, password=mfp_password)
 
         endDate = datetime.now().date()
         startDate = endDate - timedelta(days=2)

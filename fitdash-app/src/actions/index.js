@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AUTH_USER, AUTH_ERROR, USER_DETAILS, MFP_WEEK, MFP_MEALS } from './types'
+import { AUTH_USER, AUTH_ERROR, USER_DETAILS, MFP_WEEK, MFP_MEALS, API_ERROR } from './types'
 
 // dispatch: funnels through action -> middleware -> reducer
 // do whatever we want inside action creator
@@ -37,7 +37,7 @@ export const getMFP = (callback) => async dispatch => {
         dispatch({ type: MFP_WEEK, payload: response.data });
         callback(response.data);
     } catch (e) {
-        dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user details" })
+        dispatch({ type: API_ERROR, payload: "Couldn't retrive user details" })
     }
 };
 
@@ -52,7 +52,7 @@ export const getMFPMeals = (callback) => async dispatch => {
         dispatch({ type: MFP_MEALS, payload: response.data.days });
         callback(response.data.days);
     } catch (e) {
-        dispatch({ type: AUTH_ERROR, payload: "Couldn't retrive user details" })
+        dispatch({ type: API_ERROR, payload: "Couldn't retrive user details" })
     }
 };
 
@@ -94,7 +94,7 @@ export const saveDetails = (formProps, callback) => async dispatch => {
         dispatch({ type: USER_DETAILS, payload: response.data });
         callback();
     } catch (e) {
-        dispatch({ type: AUTH_ERROR, payload: "Can't save details" })
+        dispatch({ type: API_ERROR, payload: "Can't save details" })
     }
 }
 
