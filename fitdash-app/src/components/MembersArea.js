@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
@@ -17,21 +15,15 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
-
 import * as actions from '../actions';
 import requireAuth from './requireAuth';
 
 import ResponsiveGridLayout from './ResponsiveGridLayout';
-// import MapWithASearchBox from './Maps/MapWithASearchBox';
-import MFPPieChartCals from './MFPPieChartCals';
-import MFPCalsLine from './MFPCalsLine';
+import MFPPieChartCals from './Containers/MFPPieChartCals';
 import ContainerLoader from './ContainerLoader';
-import MFPTable from './MFPTable';
-
-import ColorPicker from 'material-ui-color-picker'
+import MFPTable from './Containers/MFPTable';
+import SimpleText from './Containers/SimpleText';
+import MFPCalsDays from './Containers/MFPCalsDays';
 
 const styles = theme => ({
     card: {
@@ -55,20 +47,11 @@ const styles = theme => ({
         flexDirection: 'column',
         overflowY: 'auto'
     },
-    grid: {
-        // alignItems: 'stretch'
-    },
-    button: {
-        // margin: theme.spacing.unit,
-    },
-    deleteContainer: {
-
-    },
     selectMenu: {
         display: 'none'
     },
     paperOverflow: {
-        overflow:'visible'
+        overflow: 'visible'
     }
 });
 
@@ -77,7 +60,6 @@ class MembersArea extends Component {
         super(props);
 
         this.state = {
-            containerHovered: -1,
             deleteOpen: false,
             configureOpen: false,
             newContainerOpen: false,
@@ -90,122 +72,50 @@ class MembersArea extends Component {
             localStorage.setItem('dashboard-layout', this.props.layout)
             this.grid.reloadLayout();
 
-            this.setState({
-                containers: [
-                    {
-                        data:
-                            <div>
-                                Welcome {this.props.username} to your new fitness dashboard!
-                            </div>,
-                        key: 'welcomeMessage',
-                        minWidth: 2,
-                        minHeight: 2,
-                        ready: true,
-                        configView: (
-                            <ColorPicker
-                                name='color'
-                                defaultValue='#000'
-                                onChange={color => console.log(color)}
-                            />
-                        )
-                    },
-                    {
-                        data: null,
-                        key: "mfpcals",
-                        minWidth: 2,
-                        minHeight: 10
-                    },
-                    {
-                        data: null,
-                        key: "mfpcals-chart",
-                        minWidth: 4,
-                        minHeight: 10
-                    },
-                    {
-                        data: null,
-                        key: "mfpcals-table",
-                        minWidth: 6,
-                        minHeight: 8,
-                        config: {
-                            startDate: new Date('2014-08-18T21:11:54'),
-                            endDate: new Date('2014-08-19T21:11:54')
-                        },
-                        configView: (
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <Grid container style={{ width: '60%' }} justify="space-around">
-                                    <DatePicker
-                                        margin="normal"
-                                        label="Start date"
-                                        value={this.startDate}
-                                        onChange={this.handleDateChange}
-                                    />
-                                    <DatePicker
-                                        margin="normal"
-                                        label="End date"
-                                        value={this.endDate}
-                                        onChange={this.handleDateChange}
-                                    />
-                                </Grid>
-                            </MuiPickersUtilsProvider>
-                        )
-                    }
-                ]
-            }, () => {
-                this.props.getMFP(() => {
-                    this.props.mfpWeek.mfpData.reverse();
-                    this.addDataToContainer("mfpcals",
-                        <div style={{ display: "flex", flexWrap: "wrap" }}>
-                            {this.props.mfpWeek.mfpData.map((day, index) => (
-                                <div key={day.date} style={{ border: "2px black solid", padding: "5px", margin: "5px", flexGrow: 1 }}>
-                                    <MFPCalsLine
-                                        date={index === 0 ? "Today" : new Date(day.date).toDateString()}
-                                        actual={day.totals.calories}
-                                        goal={day.goals.calories} />
-                                </div>)
-                            )}
-                        </div>
-                    )
-                    let goals = 0;
-                    let totals = 0;
-                    for (let i = 0; i < this.props.mfpWeek.mfpData.length; i += 1) {
-                        goals += this.props.mfpWeek.mfpData[i].goals.calories;
-                        totals += this.props.mfpWeek.mfpData[i].totals.calories;
-                    }
-                    this.addDataToContainer("mfpcals-chart",
-                        <div style={{ height: "100%" }}>
-                            <MFPPieChartCals actual={totals} goal={goals} remaining={goals - totals} />
-                        </div>
-                    )
-                    localStorage.setItem('dashboard-layout', this.props.layout)
-                    this.grid.reloadLayout();
-                })
-                this.props.getMFPMeals(() => {
-                    this.addDataToContainer("mfpcals-table",
-                        <div style={{ height: "100%" }}>
-                            {
-                                this.props.mfpMeals[0].meals.map(meal => {
-                                    const data = [];
-                                    meal.entry.forEach((entry, j) => {
-                                        data.push({ id: j, name: entry.name, calories: entry.totals.calories, fat: entry.totals.fat, carbs: entry.totals.carbohydrates, protein: entry.totals.protein })
-                                    })
-                                    return (<MFPTable name={meal.name} data={data} key={meal.name} />)
-                                })
-                            }
-                        </div>
-                    )
-                    localStorage.setItem('dashboard-layout', this.props.layout)
-                    this.grid.reloadLayout();
-                })
-            })
+            const containers = [
+                {
+                    component:
+                        <SimpleText text={`Welcome ${this.props.username} to your new fitness dashboard!`}
+                            showConfigureDialog={this.showConfigureDialog} />,
+                    key: 'welcomeMessage',
+                    minWidth: 2,
+                    minHeight: 2,
+                    ready: true
+                },
+                {
+                    component: <MFPCalsDays showConfigureDialog={this.showConfigureDialog} />,
+                    key: "mfpcals",
+                    minWidth: 2,
+                    minHeight: 10,
+                    ready: true
+                },
+                {
+                    component: <MFPPieChartCals showConfigureDialog={this.showConfigureDialog} />,
+                    key: "mfpcals-chart",
+                    minWidth: 4,
+                    minHeight: 10,
+                    ready: true
+                },
+                {
+                    key: "mfpcals-table",
+                    minWidth: 6,
+                    minHeight: 8,
+                    ready: true,
+                    component: <MFPTable showConfigureDialog={this.showConfigureDialog} />
+                }
+            ]
+            this.setState({ containers })
+            this.props.getMFP()
+            this.props.getMFPMeals()
         });
     }
 
     componentDidMount() {
-        window.addEventListener('beforeunload', this.saveDetails());
+        window.addEventListener('beforeunload', this.props.saveDetails());
     }
 
     componentWillUnmount() {
-        window.removeEventListener('beforeunload', this.saveDetails());
+        window.removeEventListener('beforeunload', this.props.saveDetails());
     }
 
     addDataToContainer = (key, data) => {
@@ -220,12 +130,6 @@ class MembersArea extends Component {
             return item;
         })
         this.setState({ containers });
-    }
-
-    saveDetails = () => {
-        this.props.saveDetails(() => {
-            console.log('details saved!')
-        })
     }
 
     handleOpenNewContainerSelect = () => {
@@ -252,17 +156,17 @@ class MembersArea extends Component {
 
     getContainer = key => this.state.containers.find(container => container.key === key)
 
-    handleClickConfigure = key => {
-        this.setState({ configureOpen: true, containerToConfigure: key, configView: this.getContainer(key).configView })
-        // return(this.getContainer(key).configView)
+    showConfigureDialog = (configView) => {
+        this.setState({ configureOpen: true, configView })
+
     }
 
     handleClickConfigureSave = () => {
-        this.setState({ configureOpen: false, containerToConfigure: null });
+        this.setState({ configureOpen: false });
     }
 
     handleClickCancelConfigure = () => {
-        this.setState({ configureOpen: false, containerToConfigure: null });
+        this.setState({ configureOpen: false });
     }
 
     handleClickDelete = (key) => {
@@ -280,18 +184,9 @@ class MembersArea extends Component {
         this.setState({ deleteOpen: false, containerToDelete: null });
     }
 
-    hoverButton = (index) => {
-        this.setState({ containerHovered: index === false ? -1 : index });
-    }
-
-    handleDateChange = date => {
-        console.log(date)
-        this.setState({ selectedDate: date });
-    };
-
     render() {
         const { classes } = this.props;
-        const { containers, containerHovered } = this.state;
+        const { containers } = this.state;
         return (
             <div className={classes.root}>
                 <span>
@@ -339,16 +234,11 @@ class MembersArea extends Component {
                     <Dialog
                         open={this.state.configureOpen}
                         onClose={this.handleClose}
-                        classes={{paper:classes.paperOverflow}}
+                        classes={{ paper: classes.paperOverflow }}
                     >
                         <DialogTitle id="alert-dialog-title">Configure container</DialogTitle>
                         <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-
-                            </DialogContentText>
-
                             {this.state.configView}
-
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={this.handleClickCancelConfigure} color="primary">
@@ -360,24 +250,13 @@ class MembersArea extends Component {
                         </DialogActions>
                     </Dialog>
                     <ResponsiveGridLayout saveDetails={this.props.saveDetails} ref={instance => { this.grid = instance; }}>
-                        {containers.map((item, index) => (
+                        {containers.map(item => (
                             <div key={item.key} data-grid={{ w: item.minWidth || 2, h: item.minHeight || 2, x: 0, y: 50, minW: item.minWidth || 2, minH: item.minHeight || 2 }}>
                                 <Paper square className={classes.paper}>
-                                    <div style={{ height: "20px", width: "100%", display: "table" }} onMouseEnter={() => this.hoverButton(index)} onMouseLeave={() => this.hoverButton(false)}>
-                                        {containerHovered === index ?
-                                            (<span>
-                                                <IconButton onClick={() => this.handleClickDelete(item.key)} color="primary" aria-label="delete" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
-                                                    <DeleteIcon style={{ fontSize: 20 }} />
-                                                </IconButton>
-                                                <IconButton onClick={() => this.handleClickConfigure(item.key)} color="primary" aria-label="settings" className={classes.deleteContainer} disableRipple style={{ height: "auto" }}>
-                                                    <SettingsIcon style={{ fontSize: 20 }} />
-                                                </IconButton>
-                                            </span>)
-                                            : (<div />)}
-                                    </div>
+
                                     <ContainerLoader ready={item.ready}>
                                         <div style={{ height: "100%", width: '100%' }}>
-                                            {item.data}
+                                            {item.component}
                                         </div>
                                     </ContainerLoader>
                                 </Paper>
@@ -402,6 +281,5 @@ function mapStateToProps(state) {
 export default compose(
     requireAuth,
     connect(mapStateToProps, actions),
-    // WidthProvider(Responsive),
     withStyles(styles)
 )(MembersArea);

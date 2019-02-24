@@ -3,7 +3,7 @@ const jwt = require('jwt-simple');
 var router = express.Router();
 var User = require('../models/user');
 const config = require('../config.json');
-const passportService = require('../services/pasport');
+const passportService = require('../services/passport');
 const passport = require('passport');
 
 // Authenticate using jwt, don't setup a session for user
