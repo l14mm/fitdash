@@ -41,14 +41,12 @@ class MFPTable extends Component {
         super(props);
 
         this.state = {
-            startDate: new Date('2014-08-18T21:11:54'),
-            endDate: new Date('2014-08-21T21:11:54')
+            date: new Date('2014-08-18T21:11:54')
         }
     }
 
-    setStartDate = date => this.setState({ startDate: date });
-
-    setEndDate = date => this.setState({ endDate: date });
+    // TODO: Add dispatch for getting selected date
+    setDate = date => this.setState({ date });
 
     configureClicked = () => this.props.showConfigureDialog(this.configView());
 
@@ -58,15 +56,9 @@ class MFPTable extends Component {
                 <Grid container style={{ width: '60%' }} justify="space-around">
                     <DatePicker
                         margin="normal"
-                        label="Start date"
-                        value={this.state.startDate}
-                        onChange={this.setStartDate}
-                    />
-                    <DatePicker
-                        margin="normal"
-                        label="End date"
-                        value={this.state.endDate}
-                        onChange={this.setEndDate}
+                        label="Date"
+                        value={this.state.date}
+                        onChange={this.setDate}
                     />
                 </Grid>
             </MuiPickersUtilsProvider>
