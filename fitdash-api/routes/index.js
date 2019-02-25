@@ -42,7 +42,7 @@ router.post('/register', function (req, res, next) {
     if (err) { return next(err); }
 
     if (existingUser) {
-      return res.status(422).send({ error: "Username already exists" });
+      return res.status(422).send({ error: "Username/email already exists" });
     }
 
     const user = new User({

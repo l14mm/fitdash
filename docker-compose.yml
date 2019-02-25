@@ -22,7 +22,7 @@ services:
     build: fitdash-api
     command: npm run devstart
     volumes:
-      - ./fitdash-api/tutorial:/app/tutorial
+      - ./fitdash-api/routes:/usr/src/app/routes
     ports:
       - 3011:3011
     depends_on: 
